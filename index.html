@@ -5,116 +5,198 @@
     <title>Sertão Bicos - DNA Pro Cactus</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
-        :root { --cor-fundo: #080808; --cor-principal: #ff8c00; --cor-detalhe: #00ff00; --cor-texto: #ffffff; --cor-card: #111111; }
-        body { background: var(--cor-fundo); color: var(--cor-texto); font-family: sans-serif; margin: 0; text-align: center; }
-        header { background: #000; padding: 20px; font-size: 24px; border-bottom: 3px solid var(--cor-detalhe); font-weight: bold; }
-        .container { max-width: 450px; margin: auto; padding: 20px; }
-        .upload-box { background: var(--cor-card); border: 2px dashed var(--cor-principal); height: 180px; border-radius: 15px; display: flex; align-items: center; justify-content: center; cursor: pointer; position: relative; margin-bottom: 20px; }
-        .upload-box input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
-        .cat-btn { background: #1a1a1a; border: 2px solid var(--cor-principal); padding: 15px; border-radius: 10px; color: white; cursor: pointer; flex: 1; }
-        .cat-btn.active { background: var(--cor-principal); }
-        #btnBuscar { background: #27ae60; color: white; border: none; padding: 15px; width: 100%; border-radius: 30px; font-weight: bold; font-size: 18px; display: none; margin-top: 20px; cursor: pointer; }
-        .card { background: var(--cor-card); border-radius: 12px; padding: 15px; display: flex; align-items: center; margin-top: 10px; border: 1px solid #333; }
-        .card img { width: 90px; height: 90px; border-radius: 8px; border: 2px solid var(--cor-principal); object-fit: cover; }
-        .btn-whats { background: #25d366; color: white; padding: 8px; border-radius: 5px; text-decoration: none; display: block; margin-top: 10px; font-size: 13px; font-weight: bold; }
-        #adminPanel { display: none; position: fixed; inset: 10px; background: white; color: black; padding: 20px; z-index: 999; border-radius: 15px; overflow-y: auto; }
+        :root {
+            --cor-fundo: #080808; 
+            --cor-principal: #ff8c00; 
+            --cor-detalhe: #00ff00; 
+            --cor-texto: #ffffff;
+            --cor-card: #111111;
+            --cor-whats: #25d366;
+        }
+
+        body { background: var(--cor-fundo); color: var(--cor-texto); font-family: 'Segoe UI', sans-serif; margin: 0; text-align: center; }
+        header { background: #000; padding: 25px; font-size: 26px; font-weight: 900; text-transform: uppercase; border-bottom: 3px solid var(--cor-detalhe); box-shadow: 0 0 15px rgba(0, 255, 0, 0.5); letter-spacing: 2px; }
+        .msg-rapido { color: var(--cor-principal); font-weight: 800; font-size: 13px; margin-top: 10px; display: block; letter-spacing: 1px; }
+
+        .container { max-width: 480px; margin: auto; padding: 20px; }
+        
+        .upload-box { 
+            background: var(--cor-card); border: 3px dashed var(--cor-principal); height: 200px; border-radius: 20px; 
+            display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; 
+            position: relative; background-size: contain; background-repeat: no-repeat; background-position: center; 
+            margin-bottom: 25px; transition: all 0.3s ease; box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
+        }
+        .upload-box::before { content: "🌵"; font-size: 50px; margin-bottom: 10px; filter: drop-shadow(0 0 10px var(--cor-detalhe)); }
+        .upload-box input { position: absolute; inset: 0; opacity: 0; cursor: pointer; z-index: 5; }
+
+        .category-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
+        .cat-btn { background: #1a1a1a; border: 2px solid var(--cor-principal); padding: 18px; border-radius: 12px; color: white; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        .cat-btn.active { background: var(--cor-principal); color: #000; border-color: #fff; transform: scale(1.05); }
+
+        button#btnBuscar { 
+            background: linear-gradient(45deg, #1e8449, #27ae60); color: white; border: none; padding: 20px; 
+            font-size: 20px; border-radius: 50px; cursor: pointer; font-weight: 900; width: 100%; display: none; 
+            margin-bottom: 30px; box-shadow: 0 5px 15px rgba(39, 174, 96, 0.4);
+        }
+
+        #status { margin-top: 10px; font-weight: bold; color: var(--cor-detalhe); font-size: 1.1rem; }
+
+        #resultados { display: flex; flex-direction: column; gap: 15px; margin-top: 20px; padding-bottom: 50px; }
+        .card { 
+            background: var(--cor-card); border-radius: 18px; padding: 15px; display: flex; align-items: center; 
+            border: 1px solid #333; animation: slideUp 0.4s ease forwards;
+        }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .card img { width: 110px; height: 110px; border-radius: 12px; border: 2px solid var(--cor-principal); object-fit: cover; }
+        .info { text-align: left; margin-left: 18px; flex-grow: 1; }
+        .id-label { color: var(--cor-detalhe); font-size: 24px; font-weight: 900; display: block; margin-bottom: 8px; }
+        
+        .btn-whats { 
+            background: var(--cor-whats); color: white; padding: 12px; border-radius: 10px; 
+            text-decoration: none; font-weight: bold; font-size: 15px; display: flex; 
+            align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 10px rgba(37, 211, 102, 0.3);
+        }
+
+        .admin-trigger { position: fixed; top: 0; left: 0; width: 50px; height: 50px; z-index: 9999; }
+        #adminPanel { display: none; position: fixed; inset: 15px; background: #fff; color: #000; padding: 25px; z-index: 10000; border-radius: 20px; overflow-y: auto; text-align: left; }
     </style>
 </head>
 <body>
 
-<div style="width:50px;height:50px;position:fixed;top:0;left:0;" onclick="abrirAdmin()"></div>
+<div class="admin-trigger" onclick="abrirAdmin()"></div>
 <header>🌵 SERTÃO BICOS 🌵</header>
+<span class="msg-rapido">CÉREBRO ATIVO NO PC</span>
 
 <div class="container">
     <div class="upload-box" id="dropArea">
-        <span id="labelUpload">TOQUE PARA ENVIAR FOTO</span>
+        <span id="labelUpload" style="font-weight:bold;">TOQUE PARA ENVIAR A FOTO</span>
         <input type="file" id="fotoCliente" accept="image/*">
     </div>
 
-    <div style="display:flex; gap:10px;">
+    <div class="category-grid">
         <div class="cat-btn" id="btnCarro" onclick="setCat('CARRO')">🚗 CARRO</div>
         <div class="cat-btn" id="btnAmbos" onclick="setCat('AMBOS')">🚗🏍️ AMBOS</div>
     </div>
 
-    <button id="btnBuscar" onclick="enviarParaServidor()">PROCURAR MEU BICO</button>
-    <div id="status" style="margin-top:15px; color:#00ff00;"></div>
+    <button id="btnBuscar" onclick="enviarParaServidor()">PROCURAR MEU BICO 🌵</button>
+    
+    <div id="status"></div>
     <div id="resultados"></div>
 </div>
 
 <div id="adminPanel">
-    <h3>ADM SERTÃO</h3>
-    <select id="adminCat" style="width:100%; padding:10px;"><option value="CARRO">CARRO</option><option value="AMBOS">AMBOS</option></select>
-    <input type="file" id="fotosPasta" multiple style="margin:20px 0;">
-    <button onclick="cadastrarNoServidor()" style="width:100%; padding:15px; background:green; color:white;">CADASTRAR NO PC</button>
-    <button onclick="document.getElementById('adminPanel').style.display='none'" style="margin-top:20px;">SAIR</button>
+    <h2 style="margin-top:0;">🌵 Gestão Sertão</h2>
+    <label>Categoria:</label>
+    <select id="adminCat" style="width:100%; padding:12px; margin:10px 0; border-radius:8px;">
+        <option value="CARRO">CARRO</option>
+        <option value="AMBOS">AMBOS</option>
+    </select>
+    <label>Selecionar Lote de Fotos:</label>
+    <input type="file" id="fotosPasta" multiple style="width:100%; margin:15px 0;">
+    <button onclick="cadastrarNoServidor()" style="background:#27ae60; color:white; width:100%; padding:15px; border:none; border-radius:10px; font-weight:bold;">CADASTRAR NO PC</button>
+    <button onclick="document.getElementById('adminPanel').style.display='none'" style="background:#777; color:white; width:100%; padding:15px; border:none; border-radius:10px; font-weight:bold; margin-top:15px;">SAIR</button>
 </div>
 
 <script>
-// --- AJUSTE O LINK DO NGROK AQUI ---
+// --- CONFIGURAÇÃO ATUALIZADA ---
 const URL_SERVIDOR = "https://undelegated-notarial-lessie.ngrok-free.dev"; 
 const WHATSAPP = "5511925243032";
-let categoria = '';
+let categoriaGlobal = '';
 
 function setCat(c) {
-    categoria = c;
+    categoriaGlobal = c;
     document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
     document.getElementById(c === 'CARRO' ? 'btnCarro' : 'btnAmbos').classList.add('active');
     if(document.getElementById('fotoCliente').files[0]) document.getElementById('btnBuscar').style.display = 'block';
 }
 
 document.getElementById('fotoCliente').onchange = (e) => {
-    if(e.target.files[0]) {
-        document.getElementById('labelUpload').innerText = "FOTO CARREGADA!";
-        if(categoria) document.getElementById('btnBuscar').style.display = 'block';
+    const file = e.target.files[0];
+    if(file) {
+        const reader = new FileReader();
+        reader.onload = (ev) => {
+            document.getElementById('dropArea').style.backgroundImage = `url(${ev.target.result})`;
+            document.getElementById('labelUpload').style.display = 'none';
+        };
+        reader.readAsDataURL(file);
+        if(categoriaGlobal) document.getElementById('btnBuscar').style.display = 'block';
     }
 };
 
 async function enviarParaServidor() {
     const file = document.getElementById('fotoCliente').files[0];
-    document.getElementById('status').innerText = "🌵 PROCESSANDO MATCH...";
-    
-    // Busca enviando o nome do arquivo (que deve conter o CPF)
-    const res = await fetch(`${URL_SERVIDOR}/buscar_para_limpar`, {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({ cpfs: [file.name] }) 
-    });
-    const dados = await res.json();
-    exibirResultados(dados);
+    const status = document.getElementById('status');
+    const resultados = document.getElementById('resultados');
+
+    status.innerHTML = "🌵 <b>IA BUSCANDO NO SERVIDOR...</b>";
+    resultados.innerHTML = "";
+
+    try {
+        const res = await fetch(`${URL_SERVIDOR}/buscar_para_limpar`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'ngrok-skip-browser-warning': 'true' // PULA O AVISO DO NGROK
+            },
+            body: JSON.stringify({ cpfs: [file.name] }) 
+        });
+        
+        const dados = await res.json();
+        exibirResultados(dados);
+    } catch (err) {
+        status.innerHTML = "❌ Erro: O Cérebro (PC) está offline!";
+    }
 }
 
 function exibirResultados(lista) {
     const div = document.getElementById('resultados');
-    document.getElementById('status').innerText = lista.length > 0 ? "✅ BICO LOCALIZADO!" : "❌ NÃO ENCONTRADO";
+    const status = document.getElementById('status');
+
+    if(lista.length === 0) {
+        status.innerHTML = "❌ <b>NÃO ENCONTRADO NO SERTÃO</b>";
+        return;
+    }
+
+    status.innerHTML = "✅ <b>BICO LOCALIZADO!</b>";
     
     div.innerHTML = lista.map(res => {
-        // LINK DA FOTO: Servidor + Rota das Fotos + Pasta/Arquivo
         const imgUrl = `${URL_SERVIDOR}/banco_de_bicos/${res.path}`;
+        
         return `
         <div class="card">
-            <img src="${imgUrl}" onerror="this.src='https://via.placeholder.com/90?text=Erro+Foto'">
-            <div style="text-align:left; padding-left:15px; flex-grow:1;">
-                <b style="color:#00ff00; font-size:18px;">ID: ${res.numId}</b><br>
-                <a href="https://wa.me/${WHATSAPP}?text=ID:${res.numId}" target="_blank" class="btn-whats">PEGAR DADOS 🌵</a>
+            <img src="${imgUrl}" onerror="this.src='https://via.placeholder.com/110?text=Sertao+Erro'">
+            <div class="info">
+                <span class="id-label">ID: ${res.numId}</span>
+                <a href="https://wa.me/${WHATSAPP}?text=Olá, quero o bico ID:${res.numId}" target="_blank" class="btn-whats">
+                    PEGAR DADOS 🌵
+                </a>
             </div>
         </div>`;
     }).join('');
 }
 
-function abrirAdmin() { if(prompt("Senha:") === "9122") document.getElementById('adminPanel').style.display = 'block'; }
+function abrirAdmin() { if(prompt("Senha Sertão:") === "9122") document.getElementById('adminPanel').style.display = 'block'; }
 
 async function cadastrarNoServidor() {
     const files = Array.from(document.getElementById('fotosPasta').files);
     const cat = document.getElementById('adminCat').value;
+    if(files.length === 0) return alert("Selecione fotos!");
+
     for (let file of files) {
         const fd = new FormData();
         fd.append('foto', file);
         fd.append('nome_real', file.name);
         fd.append('categoria', cat);
-        await fetch(`${URL_SERVIDOR}/cadastrar_auto`, { method: 'POST', body: fd });
-        await new Promise(r => setTimeout(r, 800)); // Protege HD
+        
+        await fetch(`${URL_SERVIDOR}/cadastrar_auto`, { 
+            method: 'POST', 
+            headers: { 'ngrok-skip-browser-warning': 'true' },
+            body: fd 
+        });
+        await new Promise(r => setTimeout(r, 600)); 
     }
-    alert("Cadastrado!");
+    alert("Cadastrado com sucesso no PC!");
 }
 </script>
 </body>
