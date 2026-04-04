@@ -2,101 +2,248 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Sertão - Scanner Ultra Deus</title>
+    <title>Sertão Bicos - DNA Ultra Deus</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
-        :root { --fundo: #050505; --neon-laranja: #ff8c00; --neon-verde: #00ff00; --preto-card: #111; }
-        body { background: var(--fundo); color: #fff; font-family: 'Inter', sans-serif; margin: 0; text-align: center; }
-        header { background: #000; padding: 30px; border-bottom: 4px solid var(--neon-laranja); font-size: 28px; font-weight: 900; letter-spacing: 3px; text-shadow: 0 0 10px var(--neon-laranja); }
-        .container { max-width: 480px; margin: auto; padding: 20px; }
-        
-        .up-box { background: var(--preto-card); border: 3px solid var(--neon-laranja); height: 220px; border-radius: 25px; display: flex; align-items: center; justify-content: center; position: relative; margin-bottom: 25px; background-size: cover; background-position: center; box-shadow: inset 0 0 30px #000; }
-        .up-box input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
-        
-        .cat-grid { display: flex; gap: 15px; margin-bottom: 25px; }
-        .cat-btn { background: #1a1a1a; border: 2px solid #444; padding: 18px; border-radius: 15px; color: #888; font-weight: 800; flex: 1; transition: 0.4s; }
-        .cat-btn.active { border-color: var(--neon-verde); color: var(--neon-verde); box-shadow: 0 0 15px var(--neon-verde); }
+        /* DESIGN PERSONALIZADO SERTÃO */
+        :root {
+            --fundo: #050505;
+            --primaria: #ff8c00; /* Laranja Sertão */
+            --secundaria: #00ff00; /* Verde Neon */
+            --card-bg: rgba(20, 20, 20, 0.95);
+            --texto: #ffffff;
+        }
 
-        #btnScan { background: linear-gradient(90deg, #ff8c00, #ff4500); color: #fff; border: none; padding: 22px; width: 100%; border-radius: 50px; font-size: 22px; font-weight: 900; display: none; cursor: pointer; animation: pulse 2s infinite; }
-        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.03); } 100% { transform: scale(1); } }
+        body {
+            background: var(--fundo);
+            background-image: radial-gradient(circle at top, #1a1a1a 0%, #050505 100%);
+            color: var(--texto);
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
 
-        .card { background: var(--preto-card); border-radius: 20px; padding: 18px; display: flex; align-items: center; border-left: 5px solid var(--neon-verde); margin-top: 20px; transition: 0.3s; }
-        .card img { width: 120px; height: 120px; border-radius: 15px; object-fit: cover; border: 2px solid #333; }
-        .info { text-align: left; margin-left: 18px; flex-grow: 1; }
+        header {
+            background: #000;
+            padding: 30px 10px;
+            font-size: 28px;
+            font-weight: 900;
+            text-transform: uppercase;
+            border-bottom: 4px solid var(--primaria);
+            box-shadow: 0 4px 20px rgba(255, 140, 0, 0.3);
+            letter-spacing: 4px;
+        }
+
+        .container {
+            max-width: 480px;
+            margin: auto;
+            padding: 20px;
+        }
+
+        /* ÁREA DE UPLOAD ESTILIZADA */
+        .upload-container {
+            background: var(--card-bg);
+            border: 3px dashed var(--primaria);
+            height: 220px;
+            border-radius: 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            margin-bottom: 25px;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            background-size: cover;
+            background-position: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .upload-container:active { transform: scale(0.95); }
         
-        .barra-porcentagem { background: #222; height: 10px; border-radius: 5px; margin: 10px 0; overflow: hidden; }
-        .barra-progresso { background: var(--neon-verde); height: 100%; box-shadow: 0 0 10px var(--neon-verde); }
+        .upload-container i { font-size: 50px; margin-bottom: 10px; display: block; }
+        .upload-container input { position: absolute; inset: 0; opacity: 0; cursor: pointer; z-index: 10; }
+
+        /* BOTÕES DE CATEGORIA */
+        .grid-botoes { display: flex; gap: 15px; margin-bottom: 25px; }
+        .btn-cat {
+            flex: 1;
+            background: #111;
+            border: 2px solid #333;
+            padding: 18px;
+            border-radius: 15px;
+            color: #888;
+            font-weight: 800;
+            cursor: pointer;
+            transition: 0.3s;
+            text-transform: uppercase;
+            font-size: 14px;
+        }
+
+        .btn-cat.active {
+            border-color: var(--secundaria);
+            color: var(--secundaria);
+            background: rgba(0, 255, 0, 0.05);
+            box-shadow: 0 0 15px rgba(0, 255, 0, 0.2);
+        }
+
+        /* BOTÃO SCANNER */
+        #btnScan {
+            background: linear-gradient(135deg, var(--primaria) 0%, #ff4500 100%);
+            color: white;
+            border: none;
+            padding: 22px;
+            width: 100%;
+            border-radius: 50px;
+            font-size: 20px;
+            font-weight: 900;
+            cursor: pointer;
+            display: none;
+            box-shadow: 0 8px 25px rgba(255, 69, 0, 0.4);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        /* CARDS DE RESULTADO ELITE */
+        .card-resultado {
+            background: var(--card-bg);
+            border-radius: 25px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            border-left: 6px solid var(--secundaria);
+            margin-top: 20px;
+            border-top: 1px solid #333;
+            animation: surgir 0.5s ease-out;
+        }
+
+        @keyframes surgir { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+
+        .card-resultado img {
+            width: 110px;
+            height: 110px;
+            border-radius: 18px;
+            object-fit: cover;
+            border: 2px solid var(--primaria);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+        }
+
+        .info-bico { text-align: left; margin-left: 20px; flex-grow: 1; }
+        .id-text { color: var(--secundaria); font-size: 26px; font-weight: 900; display: block; }
         
-        .btn-w { background: #25d366; color: #fff; padding: 12px; border-radius: 10px; text-decoration: none; font-weight: bold; display: block; margin-top: 10px; text-align: center; font-size: 14px; }
+        /* BARRA DE SEMELHANÇA */
+        .label-precisao { font-size: 12px; color: #aaa; margin-top: 8px; display: block; text-transform: uppercase; }
+        .barra-bg { background: #222; height: 8px; border-radius: 4px; margin: 6px 0; width: 100%; overflow: hidden; }
+        .barra-fill { background: var(--secundaria); height: 100%; box-shadow: 0 0 10px var(--secundaria); }
+
+        .btn-whats {
+            background: #25d366;
+            color: white;
+            padding: 12px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 12px;
+            font-size: 14px;
+            gap: 8px;
+        }
+
+        #status-ia { margin-top: 20px; font-weight: bold; color: var(--secundaria); font-style: italic; }
     </style>
 </head>
 <body>
 
-<header>🌵 ULTRA DEUS SCANNER 🌵</header>
+<header>🌵 SERTÃO BIOMETRIA 🌵</header>
+
 <div class="container">
-    <div class="up-box" id="previa"><span id="txt">FOTO DO CLIENTE</span><input type="file" id="fIn" accept="image/*"></div>
-    <div class="cat-grid">
-        <div class="cat-btn" id="b1" onclick="set('CARRO')">🚗 CARRO</div>
-        <div class="cat-btn" id="b2" onclick="set('AMBOS')">🚗🏍️ AMBOS</div>
+    <div class="upload-container" id="dropZone">
+        <span id="aviso-up" style="font-weight: 800; font-size: 14px; color: var(--primaria);">
+             [ TOQUE PARA ENVIAR FOTO ]
+        </span>
+        <input type="file" id="inputFoto" accept="image/*">
     </div>
-    <button id="btnScan" onclick="iniciar()">ESCANEAR BIOMETRIA ELITE 🔍</button>
-    <div id="st" style="margin-top:20px; font-size:18px;"></div>
-    <div id="res"></div>
+
+    <div class="grid-botoes">
+        <button class="btn-cat" id="cat-carro" onclick="selecionar('CARRO')">🚗 CARRO</button>
+        <button class="btn-cat" id="cat-ambos" onclick="selecionar('AMBOS')">🚗🏍️ AMBOS</button>
+    </div>
+
+    <button id="btnScan" onclick="processarScanner()">INICIAR SCANNER ULTRA DEUS 🔍</button>
+    
+    <div id="status-ia"></div>
+    <div id="lista-resultados"></div>
 </div>
 
 <script>
-const URL = "https://undelegated-notarial-lessie.ngrok-free.dev"; 
-const WHATS = "5511925243032";
-let cat = '';
+    const SERVIDOR = "https://undelegated-notarial-lessie.ngrok-free.dev";
+    const FONE = "5511925243032";
+    let categoriaAtual = "";
 
-function set(c) {
-    cat = c;
-    document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
-    document.getElementById(c === 'CARRO' ? 'b1' : 'b2').classList.add('active');
-    if(document.getElementById('fIn').files[0]) document.getElementById('btnScan').style.display='block';
-}
-
-document.getElementById('fIn').onchange = (e) => {
-    const f = e.target.files[0];
-    if(f) {
-        const r = new FileReader();
-        r.onload = (ev) => { document.getElementById('previa').style.backgroundImage = `url(${ev.target.result})`; document.getElementById('txt').style.display='none'; }
-        r.readAsDataURL(f);
-        if(cat) document.getElementById('btnScan').style.display='block';
+    function selecionar(c) {
+        categoriaAtual = c;
+        document.querySelectorAll('.btn-cat').forEach(b => b.classList.remove('active'));
+        document.getElementById(c === 'CARRO' ? 'cat-carro' : 'cat-ambos').classList.add('active');
+        if(document.getElementById('inputFoto').files[0]) document.getElementById('btnScan').style.display = 'block';
     }
-};
 
-async function iniciar() {
-    const f = document.getElementById('fIn').files[0];
-    document.getElementById('st').innerHTML = "⚙️ Mapeando Mandíbula e Olhos...<br><small>Level Hard Ultra Deus Ativado</small>";
-    
-    const fd = new FormData();
-    fd.append('foto_cliente', f);
-    fd.append('categoria', cat);
+    document.getElementById('inputFoto').onchange = (e) => {
+        const file = e.target.files[0];
+        if(file) {
+            const reader = new FileReader();
+            reader.onload = (ev) => {
+                document.getElementById('dropZone').style.backgroundImage = `url(${ev.target.result})`;
+                document.getElementById('aviso-up').style.display = 'none';
+            };
+            reader.readAsDataURL(file);
+            if(categoriaAtual) document.getElementById('btnScan').style.display = 'block';
+        }
+    };
 
-    try {
-        const r = await fetch(`${URL}/buscar_para_limpar`, { method: 'POST', headers: { 'ngrok-skip-browser-warning': 'true' }, body: fd });
-        const d = await r.json();
-        exibir(d);
-    } catch(e) { document.getElementById('st').innerText = "❌ ERRO: CÉREBRO OFFLINE"; }
-}
+    async function processarScanner() {
+        const f = document.getElementById('inputFoto').files[0];
+        const status = document.getElementById('status-ia');
+        status.innerHTML = "⚡ MAPEANDO MANDÍBULA E OLHOS...";
 
-function exibir(l) {
-    const div = document.getElementById('res');
-    document.getElementById('st').innerHTML = l.length > 0 ? "🏆 MATCHES ENCONTRADOS" : "❌ NENHUM GÊMEO LOCALIZADO";
-    div.innerHTML = l.map(m => {
-        return `
-        <div class="card">
-            <img src="${URL}/banco_de_bicos/${m.path}?t=${Date.now()}" onerror="this.src='https://placehold.jp/24/333/fff/120x120.png?text=ERRO+FOTO'">
-            <div class="info">
-                <b style="color:var(--neon-verde); font-size:24px;">ID: ${m.numId}</b>
-                <div style="font-size:14px; margin-top:5px;">Semelhança: <b>${m.precisao}%</b></div>
-                <div class="barra-porcentagem"><div class="barra-progresso" style="width:${m.precisao}%"></div></div>
-                <a href="https://wa.me/${WHATS}?text=ID:${m.numId}" target="_blank" class="btn-w">PEGAR DADOS 🌵</a>
+        const fd = new FormData();
+        fd.append('foto_cliente', f);
+        fd.append('categoria', categoriaAtual);
+
+        try {
+            const res = await fetch(`${SERVIDOR}/buscar_para_limpar`, {
+                method: 'POST',
+                headers: { 'ngrok-skip-browser-warning': 'true' },
+                body: fd
+            });
+            const dados = await res.json();
+            renderizar(dados);
+        } catch (err) {
+            status.innerHTML = "❌ CÉREBRO OFFLINE NO PC";
+        }
+    }
+
+    function renderizar(lista) {
+        const div = document.getElementById('lista-resultados');
+        const status = document.getElementById('status-ia');
+        
+        status.innerHTML = lista.length > 0 ? "✅ MATCHES IDENTIFICADOS!" : "❌ NENHUM GÊMEO ENCONTRADO";
+        
+        div.innerHTML = lista.map(m => `
+            <div class="card-resultado">
+                <img src="${SERVIDOR}/banco_de_bicos/${m.path}?v=${Date.now()}" onerror="this.src='https://placehold.jp/24/333/fff/110x110.png?text=ERRO+FOTO'">
+                <div class="info-bico">
+                    <span class="id-text">ID: ${m.numId}</span>
+                    <span class="label-precisao">Semelhança: ${m.precisao}%</span>
+                    <div class="barra-bg"><div class="barra-fill" style="width: ${m.precisao}%"></div></div>
+                    <a href="https://wa.me/${FONE}?text=Olá, quero o bico do ID:${m.numId}" target="_blank" class="btn-whats">
+                        PEGAR DADOS 🌵
+                    </a>
+                </div>
             </div>
-        </div>`;
-    }).join('');
-}
+        `).join('');
+    }
 </script>
 </body>
 </html>
