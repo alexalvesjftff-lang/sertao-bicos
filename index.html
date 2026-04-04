@@ -3,39 +3,100 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sertão Bicos - Identificador de Rostos</title>
+    <title>Sertão Bicos - Sistema de Identificação</title>
     <style>
-        :root { --cor-sertao: #d4a373; --cor-fundo: #fefae0; --cor-texto: #606c38; }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: var(--cor-fundo); color: var(--cor-texto); text-align: center; padding: 20px; }
-        .container { max-width: 600px; margin: auto; background: white; padding: 30px; border-radius: 15px; border: 3px solid var(--cor-sertao); box-shadow: 10px 10px 0px var(--cor-sertao); }
-        h1 { margin-bottom: 5px; color: #bc6c25; }
-        p { margin-top: 0; font-style: italic; }
-        .area-upload { border: 2px dashed var(--cor-sertao); padding: 20px; margin: 20px 0; border-radius: 10px; cursor: pointer; transition: 0.3s; }
-        .area-upload:hover { background: #faedcd; }
-        button { background-color: #283618; color: white; border: none; padding: 12px 25px; border-radius: 8px; cursor: pointer; font-size: 16px; font-weight: bold; width: 100%; transition: 0.3s; }
-        button:hover { background-color: #606c38; transform: scale(1.02); }
-        #resultado { margin-top: 25px; font-weight: bold; padding: 15px; border-radius: 8px; display: none; }
-        .admin-link { position: fixed; top: 10px; left: 10px; cursor: pointer; font-size: 20px; opacity: 0.5; }
-        .modal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 20px; border: 3px solid #bc6c25; border-radius: 10px; z-index: 1000; width: 90%; max-width: 400px; }
-        .overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 999; }
-        .cat-btn { background: #ccd5ae; color: #283618; width: 48%; margin: 1%; display: inline-block; }
-        .cat-btn.active { background: #bc6c25; color: white; }
+        /* ESTILO ORIGINAL DO SERTÃO BICOS */
+        :root { 
+            --marrom-escuro: #283618; 
+            --marrom-claro: #bc6c25; 
+            --bege-fundo: #fefae0; 
+            --bege-card: #faedcd;
+            --verde-sertao: #606c38;
+        }
+
+        body { 
+            font-family: 'Courier New', Courier, monospace; 
+            background-color: var(--bege-fundo); 
+            color: var(--marrom-escuro); 
+            margin: 0; 
+            padding: 20px; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+        }
+
+        .container { 
+            width: 100%; 
+            max-width: 500px; 
+            background: var(--bege-card); 
+            padding: 30px; 
+            border-radius: 5px; 
+            border: 4px solid var(--marrom-escuro); 
+            box-shadow: 15px 15px 0px var(--marrom-claro); 
+            text-align: center;
+        }
+
+        h1 { font-size: 2.5rem; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 2px; }
+        .subtitulo { font-size: 1rem; margin-bottom: 30px; border-bottom: 2px solid var(--marrom-escuro); padding-bottom: 10px; }
+
+        .upload-box { 
+            border: 3px dashed var(--marrom-escuro); 
+            padding: 40px 20px; 
+            margin-bottom: 20px; 
+            cursor: pointer; 
+            background: #fffef2;
+            transition: 0.3s;
+        }
+        .upload-box:hover { background: #fdf2d5; }
+
+        .btn-principal { 
+            background: var(--marrom-escuro); 
+            color: white; 
+            border: none; 
+            padding: 20px; 
+            width: 100%; 
+            font-size: 1.2rem; 
+            font-weight: bold; 
+            cursor: pointer; 
+            text-transform: uppercase;
+        }
+        .btn-principal:hover { background: var(--verde-sertao); }
+
+        #resultado { 
+            margin-top: 25px; 
+            padding: 20px; 
+            border: 3px solid var(--marrom-escuro); 
+            display: none; 
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        /* PAINEL ADMIN */
+        .admin-trigger { position: fixed; top: 10px; left: 10px; font-size: 30px; cursor: pointer; opacity: 0.6; }
+        .modal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 25px; border: 5px solid var(--marrom-escuro); z-index: 1000; width: 85%; max-width: 350px; box-shadow: 0 0 50px rgba(0,0,0,0.5); }
+        .overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 999; }
+        
+        .cat-group { display: flex; justify-content: space-between; margin: 15px 0; }
+        .cat-btn { background: #ddd; border: 2px solid var(--marrom-escuro); padding: 10px; width: 48%; cursor: pointer; font-weight: bold; }
+        .cat-btn.active { background: var(--marrom-claro); color: white; }
+
+        input[type="password"], input[type="file"] { width: 100%; padding: 10px; margin: 10px 0; box-sizing: border-box; }
     </style>
 </head>
 <body>
 
-    <div class="admin-link" onclick="abrirAdmin()">🌵</div>
+    <div class="admin-trigger" onclick="abrirAdmin()">🌵</div>
 
     <div class="container">
-        <h1>SERTÃO BICOS</h1>
-        <p>Inteligência Artificial a serviço do Sertão</p>
-        
-        <div class="area-upload" onclick="document.getElementById('foto_cliente').click()">
-            <span id="label_foto">Clique para subir a foto do cliente</span>
-            <input type="file" id="foto_cliente" hidden onchange="mostrarNome()">
+        <h1>Sertão Bicos</h1>
+        <div class="subtitulo">Tecnologia de Cabra Macho</div>
+
+        <div class="upload-box" onclick="document.getElementById('foto_cliente').click()">
+            <strong id="status_upload">📷 TOQUE PARA SUBIR A FOTO</strong>
+            <input type="file" id="foto_cliente" hidden onchange="atualizarTexto()">
         </div>
 
-        <button onclick="procurarBico()">🔍 PROCURAR BICO</button>
+        <button class="btn-principal" onclick="procurarBico()">🔍 PROCURAR BICO AGORA</button>
 
         <div id="resultado"></div>
     </div>
@@ -43,24 +104,23 @@
     <div class="overlay" id="overlay" onclick="fecharAdmin()"></div>
     <div class="modal" id="modalAdmin">
         <h3>Painel do Capitão</h3>
-        <input type="password" id="senha" placeholder="Senha de Acesso" style="width: 90%; padding: 10px; margin-bottom: 10px;">
-        <hr>
-        <p>Escolha a Categoria do Bico:</p>
-        <button class="cat-btn" onclick="selecionarCat('CARRO', event)">CARRO</button>
-        <button class="cat-btn" onclick="selecionarCat('AMBOS', event)">AMBOS</button>
-        <br><br>
-        <input type="file" id="foto_cadastro" style="margin-bottom: 15px;">
-        <button onclick="cadastrarBico()" style="background-color: #bc6c25;">✅ CADASTRAR BICO</button>
+        <input type="password" id="senha" placeholder="Senha Secreta">
+        <div class="cat-group">
+            <button class="cat-btn active" id="btnCarro" onclick="selecionarCat('CARRO')">CARRO</button>
+            <button class="cat-btn" id="btnAmbos" onclick="selecionarCat('AMBOS')">AMBOS</button>
+        </div>
+        <input type="file" id="foto_cadastro">
+        <button class="btn-principal" onclick="cadastrarBico()" style="background: var(--marrom-claro);">✅ SALVAR NO BANCO</button>
     </div>
 
     <script>
-        // LINK DO SEU PC (ATUALIZADO)
+        // CONFIGURAÇÕES
         const URL_SERVIDOR = "https://undelegated-notarial-lessie.ngrok-free.dev";
-        let categoriaSelecionada = "CARRO";
+        let categoriaGlobal = "CARRO";
 
-        function mostrarNome() {
-            const input = document.getElementById('foto_cliente');
-            document.getElementById('label_foto').innerText = input.files[0].name;
+        function atualizarTexto() {
+            const file = document.getElementById('foto_cliente').files[0];
+            if(file) document.getElementById('status_upload').innerText = "✅ " + file.name;
         }
 
         function abrirAdmin() {
@@ -73,43 +133,43 @@
             document.getElementById('overlay').style.display = 'none';
         }
 
-        // CORREÇÃO: Função que estava faltando
-        function selecionarCat(cat, e) {
-            categoriaSelecionada = cat;
-            document.querySelectorAll('.cat-btn').forEach(btn => btn.classList.remove('active'));
-            e.target.classList.add('active');
+        // CORREÇÃO DA FUNÇÃO QUE ESTAVA DANDO ERRO
+        function selecionarCat(cat) {
+            categoriaGlobal = cat;
+            document.getElementById('btnCarro').classList.remove('active');
+            document.getElementById('btnAmbos').classList.remove('active');
+            
+            if(cat === 'CARRO') document.getElementById('btnCarro').classList.add('active');
+            else document.getElementById('btnAmbos').classList.add('active');
         }
 
         async function procurarBico() {
             const foto = document.getElementById('foto_cliente').files[0];
-            if(!foto) return alert("Selecione uma foto primeiro!");
+            if(!foto) return alert("Suba a foto do cliente primeiro!");
 
             const resDiv = document.getElementById('resultado');
             resDiv.style.display = "block";
-            resDiv.style.background = "#faedcd";
-            resDiv.innerText = "⏳ Analisando traços... Aguarde.";
+            resDiv.style.background = "#fff";
+            resDiv.innerText = "⏳ O Sertão está procurando... Aguarde.";
 
             const formData = new FormData();
             formData.append('foto', foto);
 
             try {
-                const response = await fetch(`${URL_SERVIDOR}/procurar`, {
-                    method: 'POST',
-                    body: formData
-                });
+                const response = await fetch(`${URL_SERVIDOR}/procurar`, { method: 'POST', body: formData });
                 const data = await response.json();
 
                 if(data.encontrado) {
-                    resDiv.style.background = "#283618";
+                    resDiv.style.background = "var(--marrom-escuro)";
                     resDiv.style.color = "white";
-                    resDiv.innerHTML = `✅ BICO IDENTIFICADO!<br>Nome: ${data.nome}<br>Similaridade: ${data.distancia}%`;
+                    resDiv.innerHTML = `✅ BICO ENCONTRADO!<br><span style="font-size: 1.5rem">${data.nome}</span><br>Precisão: ${data.distancia}%`;
                 } else {
-                    resDiv.style.background = "#bc6c25";
+                    resDiv.style.background = "var(--marrom-claro)";
                     resDiv.style.color = "white";
-                    resDiv.innerText = "❌ Nenhuma correspondência encontrada no banco.";
+                    resDiv.innerText = "❌ Esse bico não consta no nosso banco!";
                 }
             } catch (err) {
-                resDiv.innerText = "⚠️ Erro: O servidor (PC do Paulo) está Offline.";
+                resDiv.innerText = "⚠️ ERRO: Seu PC está offline ou o Ngrok mudou.";
             }
         }
 
@@ -117,23 +177,20 @@
             const senha = document.getElementById('senha').value;
             const foto = document.getElementById('foto_cadastro').files[0];
 
-            if(senha !== "9122") return alert("Senha incorreta!");
-            if(!foto) return alert("Selecione a foto para salvar!");
+            if(senha !== "9122") return alert("Senha errada, parceiro!");
+            if(!foto) return alert("Escolha a foto do bico!");
 
             const formData = new FormData();
             formData.append('foto', foto);
-            formData.append('categoria', categoriaSelecionada);
+            formData.append('categoria', categoriaGlobal);
 
             try {
-                const response = await fetch(`${URL_SERVIDOR}/cadastrar`, {
-                    method: 'POST',
-                    body: formData
-                });
+                const response = await fetch(`${URL_SERVIDOR}/cadastrar`, { method: 'POST', body: formData });
                 const data = await response.json();
                 alert(data.mensagem);
                 fecharAdmin();
             } catch (err) {
-                alert("Erro ao conectar com o servidor.");
+                alert("Erro ao conectar com o seu PC.");
             }
         }
     </script>
