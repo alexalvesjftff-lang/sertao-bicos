@@ -1,103 +1,7 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <title>Sertão Bicos - DNA Pro Cactus</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <style>
-        :root {
-            --cor-fundo: #080808; 
-            --cor-principal: #ff8c00; 
-            --cor-detalhe: #00ff00; 
-            --cor-texto: #ffffff;
-            --cor-card: #111111;
-            --cor-whats: #25d366;
-        }
-
-        body { background: var(--cor-fundo); color: var(--cor-texto); font-family: 'Segoe UI', sans-serif; margin: 0; text-align: center; }
-        header { background: #000; padding: 25px; font-size: 28px; font-weight: 900; text-transform: uppercase; border-bottom: 3px solid var(--cor-detalhe); box-shadow: 0 0 15px rgba(0, 255, 0, 0.5); }
-        
-        .msg-rapido { color: var(--cor-principal); font-weight: 800; font-size: 14px; margin-top: 10px; display: block; letter-spacing: 1px; }
-
-        .container { max-width: 500px; margin: auto; padding: 20px; }
-        .admin-trigger { position: fixed; top: 0; left: 0; width: 60px; height: 60px; z-index: 10000; cursor: pointer; }
-
-        .upload-box { 
-            background: var(--cor-card); border: 3px dashed var(--cor-principal); height: 220px; border-radius: 20px; 
-            display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; 
-            position: relative; background-size: contain; background-repeat: no-repeat; background-position: center; 
-            margin-bottom: 25px; transition: all 0.3s ease; overflow: hidden; box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
-        }
-        
-        .upload-box:hover { border-color: var(--cor-detalhe); background-color: #1a1a1a; }
-        .upload-box::before { content: "🌵"; display: var(--display-icone, block); font-size: 45px; filter: drop-shadow(0 0 10px var(--cor-detalhe)); margin-bottom: 10px; }
-        .upload-box input { position: absolute; inset: 0; opacity: 0; cursor: pointer; z-index: 2; }
-
-        .category-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 25px; }
-        .cat-btn { background: #1a1a1a; border: 2px solid var(--cor-principal); padding: 18px; border-radius: 12px; color: white; font-weight: bold; cursor: pointer; }
-        .cat-btn.active { background: var(--cor-principal); border-color: #fff; }
-
-        button#btnBuscar { 
-            background: linear-gradient(45deg, #1e8449, #27ae60); color: white; border: none; padding: 18px; 
-            font-size: 19px; border-radius: 50px; cursor: pointer; font-weight: 900; width: 100%; display: none; margin-bottom: 20px;
-        }
-
-        #status { margin-top: 10px; font-weight: bold; color: var(--cor-detalhe); }
-        #avisoMescla { display: none; background: #d35400; color: white; padding: 15px; border-radius: 10px; margin: 15px 0; font-weight: bold; font-size: 14px; border: 2px solid #fff; line-height: 1.4; }
-
-        #resultados { display: flex; flex-direction: column; gap: 12px; padding-bottom: 90px; }
-        .card { background: var(--cor-card); border-radius: 15px; padding: 15px; display: flex; align-items: center; gap: 15px; border: 1px solid #333; }
-        .card img { width: 100px; height: 100px; border-radius: 10px; border: 2px solid var(--cor-principal); object-fit: cover; }
-
-        .copy-id-btn { background: var(--cor-principal); color: #000; padding: 6px 12px; border-radius: 6px; font-weight: 900; cursor: pointer; display: inline-block; margin: 5px 0; font-size: 14px; box-shadow: 0 2px 5px rgba(0,0,0,0.5); }
-        .btn-whats { background: var(--cor-whats); color: white; padding: 10px 15px; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 14px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; margin-top: 8px; border: none; cursor: pointer; box-shadow: 0 4px 10px rgba(37, 211, 102, 0.4); width: 100%; }
-
-        #adminPanel { display: none; background: #fdf2e2; border: 2px solid #333; padding: 25px; position: fixed; inset: 10px; z-index: 10001; border-radius: 15px; text-align: left; overflow-y: auto; color: #333; }
-        .admin-input { width: 100%; padding: 12px; margin: 10px 0; border-radius: 8px; border: 1px solid #ccc; box-sizing: border-box; }
-        .btn-acao { color:white; width:100%; padding:15px; border:none; border-radius:8px; font-weight:bold; cursor:pointer; margin-top:10px; }
-        #modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 20000; align-items: center; justify-content: center; }
-        #modal img { max-width: 90%; max-height: 80%; border: 3px solid var(--cor-detalhe); }
-    </style>
-</head>
-<body>
-
-<div class="admin-trigger" onclick="abrirAdmin()"></div>
-<header>🌵 SERTÃO BICOS 🌵</header>
-<span class="msg-rapido">🌵 ENCONTRE SEU BICO NO PC 🌵</span>
-
-<div class="container">
-    <div class="upload-box" id="dropArea">
-        <span style="font-weight:bold; letter-spacing: 1px;" id="labelUpload">TOQUE PARA ENVIAR A FOTO</span>
-        <input type="file" id="fotoCliente" accept="image/*">
-    </div>
-
-    <div class="category-grid">
-        <div class="cat-btn" id="btnCarro" onclick="selecionarCat('CARRO')">🚗 CARRO</div>
-        <div class="cat-btn" id="btnAmbos" onclick="selecionarCat('AMBOS')">🚗🏍️ AMBOS</div>
-    </div>
-
-    <button id="btnBuscar" onclick="enviarParaServidor()">PROCURAR BICO</button>
-    <div id="status"></div>
-    <div id="avisoMescla">⚠️ TESTE O BICO ANTES VEJA SE DA MESCLA!</div>
-    <div id="resultados"></div>
-</div>
-
-<div id="modal" onclick="this.style.display='none'"><img id="imgModal" src=""></div>
-
-<div id="adminPanel">
-    <h3>🌵 Gestão Sertão Bicos</h3>
-    <hr>
-    <h4>Novo Cadastro</h4>
-    <select id="adminCat" class="admin-input"><option value="CARRO">CARRO</option><option value="AMBOS">AMBOS</option></select>
-    <input type="file" id="fotosPasta" class="admin-input" multiple>
-    <button id="btnCadastrarLote" onclick="cadastrarNoServidor()" class="btn-acao" style="background:#27ae60;">CADASTRAR NO PC</button>
-    <button onclick="document.getElementById('adminPanel').style.display='none'" class="btn-acao" style="background:#777;">SAIR</button>
-</div>
-
 <script>
 // --- CONFIGURAÇÃO ---
-// SUBSTITUA PELO SEU LINK DO NGROK:
-const URL_SERVIDOR = https://undelegated-notarial-lessie.ngrok-free.dev -> http://localhost:5000
+// AQUI ESTÁ A CORREÇÃO: Somente o link do Ngrok entre aspas!
+const URL_SERVIDOR = "https://undelegated-notarial-lessie.ngrok-free.dev"; 
 const WHATSAPP_NUMERO = "5511925243032";
 let categoriaSelecionada = '';
 
@@ -105,7 +9,8 @@ let categoriaSelecionada = '';
 function selecionarCat(cat) {
     categoriaSelecionada = cat;
     document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
-    document.getElementById(cat === 'CARRO' ? 'btnCarro' : 'btnAmbos').classList.add('active');
+    const idBtn = cat === 'CARRO' ? 'btnCarro' : 'btnAmbos';
+    if(document.getElementById(idBtn)) document.getElementById(idBtn).classList.add('active');
     if(document.getElementById('fotoCliente').files[0]) document.getElementById('btnBuscar').style.display = 'block';
 }
 
@@ -135,6 +40,7 @@ async function enviarParaServidor() {
     reader.readAsDataURL(file);
     reader.onload = async () => {
         try {
+            // Chamada para a rota de busca por imagem (IA)
             const res = await fetch(`${URL_SERVIDOR}/buscar`, {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
@@ -147,19 +53,26 @@ async function enviarParaServidor() {
             const dados = await res.json();
             exibirResultados(dados);
         } catch (err) {
-            document.getElementById('status').innerText = "Erro ao conectar com o servidor!";
+            document.getElementById('status').innerText = "Erro ao conectar com o servidor! Verifique se o Ngrok está aberto.";
         }
     };
 }
 
 function exibirResultados(lista) {
-    document.getElementById('status').innerHTML = lista.length > 0 ? "✅ <b>BUSCA CONCLUÍDA!</b>" : "❌ <b>NENHUM BICO ENCONTRADO</b>";
-    document.getElementById('avisoMescla').style.display = "block";
+    const status = document.getElementById('status');
+    const divResultados = document.getElementById('resultados');
+    const aviso = document.getElementById('avisoMescla');
+
+    status.innerHTML = lista.length > 0 ? "✅ <b>BUSCA CONCLUÍDA!</b>" : "❌ <b>NENHUM BICO ENCONTRADO</b>";
+    aviso.style.display = lista.length > 0 ? "block" : "none";
     
-    document.getElementById('resultados').innerHTML = lista.map(res => {
-        const linkZap = `https://wa.me/${WHATSAPP_NUMERO}?text=ID:${res.numId}`;
+    divResultados.innerHTML = lista.map(res => {
+        const linkZap = `https://wa.me/${WHATSAPP_NUMERO}?text=Olá, quero os dados do bico ID:${res.numId}`;
+        // IMPORTANTE: O servidor Python deve servir a imagem na rota /banco_de_bicos/
+        const imgUrl = res.foto.startsWith('http') ? res.foto : `${URL_SERVIDOR}/banco_de_bicos/${res.foto}`;
+
         return `<div class="card">
-            <img src="${res.foto}" onclick="zoom('${res.foto}')">
+            <img src="${imgUrl}" onclick="zoom('${imgUrl}')" onerror="this.src='https://via.placeholder.com/100?text=Erro+Foto'">
             <div style="text-align:left; flex-grow:1">
                 <b style="color:var(--cor-detalhe);">${res.score}% Match</b><br>
                 <div class="copy-id-btn" onclick="navigator.clipboard.writeText('${res.numId}'); alert('ID Copiado!');">ID: ${res.numId} 📋</div><br>
@@ -169,8 +82,10 @@ function exibirResultados(lista) {
     }).join('');
 }
 
-// --- LÓGICA ADMIN ---
-function abrirAdmin() { if(prompt("Senha:") === "9122") document.getElementById('adminPanel').style.display = 'block'; }
+// --- LÓGICA ADMIN (CADASTRO RÁPIDO) ---
+function abrirAdmin() { 
+    if(prompt("Senha:") === "9122") document.getElementById('adminPanel').style.display = 'block'; 
+}
 
 async function cadastrarNoServidor() {
     const files = Array.from(document.getElementById('fotosPasta').files);
@@ -182,25 +97,29 @@ async function cadastrarNoServidor() {
     btn.disabled = true;
 
     for (let file of files) {
-        let idFinal = file.name.replace(/\D/g, '').substring(0,6);
+        let idFinal = file.name.replace(/\D/g, '').substring(0,5); // Ajustado para 5 dígitos padrão
         const reader = new FileReader();
         
-        const promessa = new Promise(resolve => {
+        await new Promise(resolve => {
             reader.readAsDataURL(file);
             reader.onload = async () => {
-                await fetch(`${URL_SERVIDOR}/cadastrar`, {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({
-                        image: reader.result,
-                        numId: idFinal,
-                        categoria: cat
-                    })
-                });
+                try {
+                    await fetch(`${URL_SERVIDOR}/cadastrar_auto`, { // Usando a rota de cadastro automático que criamos
+                        method: 'POST',
+                        body: (function() {
+                            const fd = new FormData();
+                            fd.append('foto', file);
+                            fd.append('nome_real', file.name);
+                            fd.append('categoria', cat);
+                            return fd;
+                        })()
+                    });
+                } catch (e) { console.error("Erro no envio", e); }
                 resolve();
             };
         });
-        await promessa;
+        // Espera 500ms entre cadastros para proteger o HD
+        await new Promise(r => setTimeout(r, 500));
     }
     
     btn.innerText = "CADASTRAR NO PC";
@@ -208,7 +127,8 @@ async function cadastrarNoServidor() {
     alert("Processo Finalizado!");
 }
 
-function zoom(src) { document.getElementById('imgModal').src = src; document.getElementById('modal').style.display = 'flex'; }
+function zoom(src) { 
+    document.getElementById('imgModal').src = src; 
+    document.getElementById('modal').style.display = 'flex'; 
+}
 </script>
-</body>
-</html>
