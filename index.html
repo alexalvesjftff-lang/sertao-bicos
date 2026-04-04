@@ -2,37 +2,35 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Sertão Bicos - DNA Ultra Deus</title>
+    <title>Sertão Bicos - DNA Facial Elite</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
-        /* DESIGN PERSONALIZADO SERTÃO */
         :root {
             --fundo: #050505;
             --primaria: #ff8c00; /* Laranja Sertão */
             --secundaria: #00ff00; /* Verde Neon */
-            --card-bg: rgba(20, 20, 20, 0.95);
+            --card-bg: #111111;
             --texto: #ffffff;
         }
 
         body {
             background: var(--fundo);
-            background-image: radial-gradient(circle at top, #1a1a1a 0%, #050505 100%);
             color: var(--texto);
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            font-family: 'Impact', 'Segoe UI', sans-serif;
             margin: 0;
             padding: 0;
-            overflow-x: hidden;
+            text-align: center;
         }
 
         header {
             background: #000;
-            padding: 30px 10px;
-            font-size: 28px;
-            font-weight: 900;
+            padding: 25px;
+            font-size: 34px;
             text-transform: uppercase;
             border-bottom: 4px solid var(--primaria);
-            box-shadow: 0 4px 20px rgba(255, 140, 0, 0.3);
-            letter-spacing: 4px;
+            box-shadow: 0 4px 20px rgba(255, 140, 0, 0.4);
+            letter-spacing: 3px;
+            text-shadow: 2px 2px #000;
         }
 
         .container {
@@ -41,100 +39,95 @@
             padding: 20px;
         }
 
-        /* ÁREA DE UPLOAD ESTILIZADA */
-        .upload-container {
+        /* ÁREA DE UPLOAD ESTILO SERTÃO */
+        .upload-area {
             background: var(--card-bg);
             border: 3px dashed var(--primaria);
-            height: 220px;
-            border-radius: 30px;
+            height: 200px;
+            border-radius: 25px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             position: relative;
             margin-bottom: 25px;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             background-size: cover;
             background-position: center;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            box-shadow: inset 0 0 20px #000;
         }
-
-        .upload-container:active { transform: scale(0.95); }
         
-        .upload-container i { font-size: 50px; margin-bottom: 10px; display: block; }
-        .upload-container input { position: absolute; inset: 0; opacity: 0; cursor: pointer; z-index: 10; }
+        .upload-area::before { content: "🌵"; font-size: 55px; margin-bottom: 5px; filter: drop-shadow(0 0 5px var(--secundaria)); }
+        .upload-area input { position: absolute; inset: 0; opacity: 0; cursor: pointer; z-index: 10; }
 
-        /* BOTÕES DE CATEGORIA */
-        .grid-botoes { display: flex; gap: 15px; margin-bottom: 25px; }
-        .btn-cat {
+        /* SELEÇÃO DE CATEGORIA */
+        .btn-group { display: flex; gap: 12px; margin-bottom: 25px; }
+        .btn-tipo {
             flex: 1;
-            background: #111;
+            background: #1a1a1a;
             border: 2px solid #333;
             padding: 18px;
             border-radius: 15px;
-            color: #888;
-            font-weight: 800;
+            color: #fff;
+            font-weight: bold;
             cursor: pointer;
-            transition: 0.3s;
             text-transform: uppercase;
-            font-size: 14px;
+            transition: 0.3s;
         }
 
-        .btn-cat.active {
+        .btn-tipo.active {
             border-color: var(--secundaria);
             color: var(--secundaria);
+            box-shadow: 0 0 15px rgba(0, 255, 0, 0.3);
             background: rgba(0, 255, 0, 0.05);
-            box-shadow: 0 0 15px rgba(0, 255, 0, 0.2);
         }
 
-        /* BOTÃO SCANNER */
+        /* BOTÃO DE SCANNER ULTRA DEUS */
         #btnScan {
-            background: linear-gradient(135deg, var(--primaria) 0%, #ff4500 100%);
+            background: linear-gradient(135deg, #ff8c00, #ff4500);
             color: white;
             border: none;
             padding: 22px;
             width: 100%;
-            border-radius: 50px;
+            border-radius: 60px;
             font-size: 20px;
             font-weight: 900;
             cursor: pointer;
             display: none;
-            box-shadow: 0 8px 25px rgba(255, 69, 0, 0.4);
+            box-shadow: 0 6px 25px rgba(255, 69, 0, 0.5);
             text-transform: uppercase;
-            letter-spacing: 2px;
+            letter-spacing: 1px;
         }
 
-        /* CARDS DE RESULTADO ELITE */
-        .card-resultado {
+        /* RESULTADOS DA BIOMETRIA */
+        .card-bico {
             background: var(--card-bg);
-            border-radius: 25px;
-            padding: 20px;
+            border-radius: 20px;
+            padding: 18px;
             display: flex;
             align-items: center;
             border-left: 6px solid var(--secundaria);
-            margin-top: 20px;
-            border-top: 1px solid #333;
-            animation: surgir 0.5s ease-out;
+            margin-top: 18px;
+            border-top: 1px solid #222;
+            text-align: left;
+            animation: slideIn 0.4s ease-out;
         }
 
-        @keyframes surgir { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideIn { from { opacity: 0; transform: translateX(-20px); } to { opacity: 1; transform: translateX(0); } }
 
-        .card-resultado img {
-            width: 110px;
-            height: 110px;
-            border-radius: 18px;
+        .card-bico img {
+            width: 115px;
+            height: 115px;
+            border-radius: 15px;
             object-fit: cover;
             border: 2px solid var(--primaria);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
         }
 
-        .info-bico { text-align: left; margin-left: 20px; flex-grow: 1; }
-        .id-text { color: var(--secundaria); font-size: 26px; font-weight: 900; display: block; }
+        .info { margin-left: 18px; flex-grow: 1; }
+        .id-bico { color: var(--secundaria); font-size: 28px; font-weight: 900; display: block; }
         
-        /* BARRA DE SEMELHANÇA */
-        .label-precisao { font-size: 12px; color: #aaa; margin-top: 8px; display: block; text-transform: uppercase; }
-        .barra-bg { background: #222; height: 8px; border-radius: 4px; margin: 6px 0; width: 100%; overflow: hidden; }
-        .barra-fill { background: var(--secundaria); height: 100%; box-shadow: 0 0 10px var(--secundaria); }
+        .perc-label { font-size: 13px; color: #aaa; margin-top: 8px; display: block; font-family: sans-serif; }
+        .barra-p { background: #222; height: 10px; border-radius: 5px; overflow: hidden; margin: 6px 0; border: 1px solid #333; }
+        .barra-f { background: var(--secundaria); height: 100%; box-shadow: 0 0 10px var(--secundaria); }
 
         .btn-whats {
             background: #25d366;
@@ -148,44 +141,42 @@
             justify-content: center;
             margin-top: 12px;
             font-size: 14px;
-            gap: 8px;
+            font-family: sans-serif;
         }
 
-        #status-ia { margin-top: 20px; font-weight: bold; color: var(--secundaria); font-style: italic; }
+        #status { margin-top: 25px; font-weight: bold; color: var(--secundaria); font-size: 18px; letter-spacing: 1px; }
     </style>
 </head>
 <body>
 
-<header>🌵 SERTÃO BIOMETRIA 🌵</header>
+<header>🌵 SERTÃO BICOS 🌵</header>
 
 <div class="container">
-    <div class="upload-container" id="dropZone">
-        <span id="aviso-up" style="font-weight: 800; font-size: 14px; color: var(--primaria);">
-             [ TOQUE PARA ENVIAR FOTO ]
-        </span>
+    <div class="upload-area" id="boxUp">
+        <span id="txtUp" style="font-weight: bold;">ENVIAR FOTO DO CLIENTE</span>
         <input type="file" id="inputFoto" accept="image/*">
     </div>
 
-    <div class="grid-botoes">
-        <button class="btn-cat" id="cat-carro" onclick="selecionar('CARRO')">🚗 CARRO</button>
-        <button class="btn-cat" id="cat-ambos" onclick="selecionar('AMBOS')">🚗🏍️ AMBOS</button>
+    <div class="btn-group">
+        <button class="btn-tipo" id="b-carro" onclick="set('CARRO')">🚗 CARRO</button>
+        <button class="btn-tipo" id="b-ambos" onclick="set('AMBOS')">🚗🏍️ AMBOS</button>
     </div>
 
-    <button id="btnScan" onclick="processarScanner()">INICIAR SCANNER ULTRA DEUS 🔍</button>
+    <button id="btnScan" onclick="iniciarScan()">ESCANEAR BIOMETRIA ELITE 🔍</button>
     
-    <div id="status-ia"></div>
-    <div id="lista-resultados"></div>
+    <div id="status"></div>
+    <div id="lista"></div>
 </div>
 
 <script>
     const SERVIDOR = "https://undelegated-notarial-lessie.ngrok-free.dev";
-    const FONE = "5511925243032";
-    let categoriaAtual = "";
+    const WHATS = "5511925243032";
+    let catAtual = "";
 
-    function selecionar(c) {
-        categoriaAtual = c;
-        document.querySelectorAll('.btn-cat').forEach(b => b.classList.remove('active'));
-        document.getElementById(c === 'CARRO' ? 'cat-carro' : 'cat-ambos').classList.add('active');
+    function set(c) {
+        catAtual = c;
+        document.querySelectorAll('.btn-tipo').forEach(b => b.classList.remove('active'));
+        document.getElementById(c === 'CARRO' ? 'b-carro' : 'b-ambos').classList.add('active');
         if(document.getElementById('inputFoto').files[0]) document.getElementById('btnScan').style.display = 'block';
     }
 
@@ -194,22 +185,22 @@
         if(file) {
             const reader = new FileReader();
             reader.onload = (ev) => {
-                document.getElementById('dropZone').style.backgroundImage = `url(${ev.target.result})`;
-                document.getElementById('aviso-up').style.display = 'none';
+                document.getElementById('boxUp').style.backgroundImage = `url(${ev.target.result})`;
+                document.getElementById('txtUp').style.display = 'none';
             };
             reader.readAsDataURL(file);
-            if(categoriaAtual) document.getElementById('btnScan').style.display = 'block';
+            if(catAtual) document.getElementById('btnScan').style.display = 'block';
         }
     };
 
-    async function processarScanner() {
+    async function iniciarScan() {
         const f = document.getElementById('inputFoto').files[0];
-        const status = document.getElementById('status-ia');
-        status.innerHTML = "⚡ MAPEANDO MANDÍBULA E OLHOS...";
+        const st = document.getElementById('status');
+        st.innerHTML = "⚡ MAPEANDO BIOMETRIA FACIAL...";
 
         const fd = new FormData();
         fd.append('foto_cliente', f);
-        fd.append('categoria', categoriaAtual);
+        fd.append('categoria', catAtual);
 
         try {
             const res = await fetch(`${SERVIDOR}/buscar_para_limpar`, {
@@ -218,26 +209,26 @@
                 body: fd
             });
             const dados = await res.json();
-            renderizar(dados);
+            mostrar(dados);
         } catch (err) {
-            status.innerHTML = "❌ CÉREBRO OFFLINE NO PC";
+            st.innerHTML = "❌ SERVIDOR OFFLINE NO PC";
         }
     }
 
-    function renderizar(lista) {
-        const div = document.getElementById('lista-resultados');
-        const status = document.getElementById('status-ia');
+    function mostrar(lista) {
+        const div = document.getElementById('lista');
+        const st = document.getElementById('status');
         
-        status.innerHTML = lista.length > 0 ? "✅ MATCHES IDENTIFICADOS!" : "❌ NENHUM GÊMEO ENCONTRADO";
+        st.innerHTML = lista.length > 0 ? "✅ MATCHES IDENTIFICADOS!" : "❌ NENHUM GÊMEO ENCONTRADO";
         
         div.innerHTML = lista.map(m => `
-            <div class="card-resultado">
-                <img src="${SERVIDOR}/banco_de_bicos/${m.path}?v=${Date.now()}" onerror="this.src='https://placehold.jp/24/333/fff/110x110.png?text=ERRO+FOTO'">
-                <div class="info-bico">
-                    <span class="id-text">ID: ${m.numId}</span>
-                    <span class="label-precisao">Semelhança: ${m.precisao}%</span>
-                    <div class="barra-bg"><div class="barra-fill" style="width: ${m.precisao}%"></div></div>
-                    <a href="https://wa.me/${FONE}?text=Olá, quero o bico do ID:${m.numId}" target="_blank" class="btn-whats">
+            <div class="card-bico">
+                <img src="${SERVIDOR}/banco_de_bicos/${m.path}?v=${Date.now()}" onerror="this.src='https://placehold.jp/24/333/fff/115x115.png?text=FOTO+OFF'">
+                <div class="info">
+                    <span class="id-bico">ID: ${m.numId}</span>
+                    <span class="perc-label">Semelhança: ${m.precisao}%</span>
+                    <div class="barra-p"><div class="barra-f" style="width: ${m.precisao}%"></div></div>
+                    <a href="https://wa.me/${WHATS}?text=Olá, quero o bico do ID:${m.numId}" target="_blank" class="btn-whats">
                         PEGAR DADOS 🌵
                     </a>
                 </div>
