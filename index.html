@@ -2,149 +2,133 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Sertão Bicos - DNA Facial Elite</title>
+    <title>Sertão Bicos - Biometria Facial</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
+        /* O SEU LAYOUT ORIGINAL DE VOLTA */
         :root {
-            --fundo: #050505;
-            --primaria: #ff8c00; /* Laranja Sertão */
-            --secundaria: #00ff00; /* Verde Neon */
-            --card-bg: #111111;
-            --texto: #ffffff;
+            --fundo: #000000;
+            --laranja: #ff8c00;
+            --verde: #00ff00;
+            --card: #111111;
         }
 
         body {
             background: var(--fundo);
-            color: var(--texto);
-            font-family: 'Impact', 'Segoe UI', sans-serif;
+            color: #fff;
+            font-family: 'Impact', sans-serif;
             margin: 0;
-            padding: 0;
             text-align: center;
         }
 
         header {
             background: #000;
             padding: 25px;
-            font-size: 34px;
+            font-size: 30px;
+            border-bottom: 4px solid var(--laranja);
             text-transform: uppercase;
-            border-bottom: 4px solid var(--primaria);
-            box-shadow: 0 4px 20px rgba(255, 140, 0, 0.4);
-            letter-spacing: 3px;
-            text-shadow: 2px 2px #000;
+            letter-spacing: 2px;
         }
 
         .container {
-            max-width: 480px;
+            max-width: 450px;
             margin: auto;
             padding: 20px;
         }
 
-        /* ÁREA DE UPLOAD ESTILO SERTÃO */
-        .upload-area {
-            background: var(--card-bg);
-            border: 3px dashed var(--primaria);
-            height: 200px;
-            border-radius: 25px;
+        /* BOX DE UPLOAD ORIGINAL COM OS CACTOS */
+        .upload-box {
+            background: var(--card);
+            border: 3px dashed var(--laranja);
+            height: 180px;
+            border-radius: 15px;
             display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
             position: relative;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
             background-size: cover;
             background-position: center;
-            box-shadow: inset 0 0 20px #000;
         }
         
-        .upload-area::before { content: "🌵"; font-size: 55px; margin-bottom: 5px; filter: drop-shadow(0 0 5px var(--secundaria)); }
-        .upload-area input { position: absolute; inset: 0; opacity: 0; cursor: pointer; z-index: 10; }
+        .upload-box::before { content: "🌵"; font-size: 50px; }
+        .upload-box input { position: absolute; inset: 0; opacity: 0; cursor: pointer; z-index: 5; }
 
-        /* SELEÇÃO DE CATEGORIA */
-        .btn-group { display: flex; gap: 12px; margin-bottom: 25px; }
-        .btn-tipo {
-            flex: 1;
-            background: #1a1a1a;
-            border: 2px solid #333;
-            padding: 18px;
-            border-radius: 15px;
+        .cat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+        .cat-btn {
+            background: #222;
+            border: 2px solid var(--laranja);
+            padding: 15px;
+            border-radius: 10px;
             color: #fff;
             font-weight: bold;
             cursor: pointer;
-            text-transform: uppercase;
-            transition: 0.3s;
         }
 
-        .btn-tipo.active {
-            border-color: var(--secundaria);
-            color: var(--secundaria);
-            box-shadow: 0 0 15px rgba(0, 255, 0, 0.3);
-            background: rgba(0, 255, 0, 0.05);
+        .cat-btn.active {
+            background: var(--laranja);
+            color: #000;
+            box-shadow: 0 0 10px var(--laranja);
         }
 
-        /* BOTÃO DE SCANNER ULTRA DEUS */
-        #btnScan {
-            background: linear-gradient(135deg, #ff8c00, #ff4500);
-            color: white;
+        /* BOTÃO DE BUSCA ORIGINAL */
+        #btnBuscar {
+            background: #27ae60;
+            color: #fff;
             border: none;
-            padding: 22px;
+            padding: 18px;
             width: 100%;
-            border-radius: 60px;
-            font-size: 20px;
-            font-weight: 900;
-            cursor: pointer;
+            border-radius: 30px;
+            font-weight: bold;
+            font-size: 18px;
             display: none;
-            box-shadow: 0 6px 25px rgba(255, 69, 0, 0.5);
+            cursor: pointer;
             text-transform: uppercase;
-            letter-spacing: 1px;
         }
 
-        /* RESULTADOS DA BIOMETRIA */
-        .card-bico {
-            background: var(--card-bg);
-            border-radius: 20px;
-            padding: 18px;
+        /* CARDS DE RESULTADOS */
+        .card {
+            background: var(--card);
+            border-radius: 15px;
+            padding: 15px;
             display: flex;
             align-items: center;
-            border-left: 6px solid var(--secundaria);
-            margin-top: 18px;
-            border-top: 1px solid #222;
+            border: 1px solid #333;
+            margin-bottom: 10px;
             text-align: left;
-            animation: slideIn 0.4s ease-out;
         }
 
-        @keyframes slideIn { from { opacity: 0; transform: translateX(-20px); } to { opacity: 1; transform: translateX(0); } }
-
-        .card-bico img {
-            width: 115px;
-            height: 115px;
-            border-radius: 15px;
+        .card img {
+            width: 110px;
+            height: 110px;
+            border-radius: 12px;
+            border: 2px solid var(--laranja);
             object-fit: cover;
-            border: 2px solid var(--primaria);
         }
 
-        .info { margin-left: 18px; flex-grow: 1; }
-        .id-bico { color: var(--secundaria); font-size: 28px; font-weight: 900; display: block; }
+        .info { margin-left: 15px; flex-grow: 1; }
+        .id-text { color: var(--verde); font-size: 26px; font-weight: 900; display: block; }
         
-        .perc-label { font-size: 13px; color: #aaa; margin-top: 8px; display: block; font-family: sans-serif; }
-        .barra-p { background: #222; height: 10px; border-radius: 5px; overflow: hidden; margin: 6px 0; border: 1px solid #333; }
-        .barra-f { background: var(--secundaria); height: 100%; box-shadow: 0 0 10px var(--secundaria); }
+        /* BARRA DE SEMELHANÇA HARD */
+        .perc-info { font-size: 12px; color: #888; margin-top: 5px; font-family: sans-serif; }
+        .barra-fundo { background: #222; height: 8px; border-radius: 4px; overflow: hidden; margin: 4px 0; }
+        .barra-cor { background: var(--verde); height: 100%; box-shadow: 0 0 8px var(--verde); }
 
         .btn-whats {
             background: #25d366;
             color: white;
-            padding: 12px;
-            border-radius: 12px;
+            padding: 10px;
+            border-radius: 8px;
             text-decoration: none;
             font-weight: bold;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-top: 12px;
+            display: block;
+            margin-top: 10px;
+            text-align: center;
             font-size: 14px;
             font-family: sans-serif;
         }
 
-        #status { margin-top: 25px; font-weight: bold; color: var(--secundaria); font-size: 18px; letter-spacing: 1px; }
+        #status { margin-top: 15px; font-weight: bold; color: var(--verde); }
     </style>
 </head>
 <body>
@@ -152,55 +136,55 @@
 <header>🌵 SERTÃO BICOS 🌵</header>
 
 <div class="container">
-    <div class="upload-area" id="boxUp">
-        <span id="txtUp" style="font-weight: bold;">ENVIAR FOTO DO CLIENTE</span>
-        <input type="file" id="inputFoto" accept="image/*">
+    <div class="upload-box" id="dropArea">
+        <span id="txtUp" style="position:absolute; bottom:20px; font-size:12px; font-family:sans-serif;">ENVIAR FOTO DO CLIENTE</span>
+        <input type="file" id="fotoIn" accept="image/*">
     </div>
 
-    <div class="btn-group">
-        <button class="btn-tipo" id="b-carro" onclick="set('CARRO')">🚗 CARRO</button>
-        <button class="btn-tipo" id="b-ambos" onclick="set('AMBOS')">🚗🏍️ AMBOS</button>
+    <div class="cat-grid">
+        <div class="cat-btn" id="b-carro" onclick="setCat('CARRO')">🚗 CARRO</div>
+        <div class="cat-btn" id="b-ambos" onclick="setCat('AMBOS')">🚗🏍️ AMBOS</div>
     </div>
 
-    <button id="btnScan" onclick="iniciarScan()">ESCANEAR BIOMETRIA ELITE 🔍</button>
+    <button id="btnBuscar" onclick="buscarFacial()">BUSCAR POR BIOMETRIA 🔍</button>
     
     <div id="status"></div>
-    <div id="lista"></div>
+    <div id="resultados"></div>
 </div>
 
 <script>
-    const SERVIDOR = "https://undelegated-notarial-lessie.ngrok-free.dev";
+    const SERVIDOR = "https://undelegated-notarial-lessie.ngrok-free.dev"; 
     const WHATS = "5511925243032";
-    let catAtual = "";
+    let catSel = "";
 
-    function set(c) {
-        catAtual = c;
-        document.querySelectorAll('.btn-tipo').forEach(b => b.classList.remove('active'));
+    function setCat(c) {
+        catSel = c;
+        document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
         document.getElementById(c === 'CARRO' ? 'b-carro' : 'b-ambos').classList.add('active');
-        if(document.getElementById('inputFoto').files[0]) document.getElementById('btnScan').style.display = 'block';
+        if(document.getElementById('fotoIn').files[0]) document.getElementById('btnBuscar').style.display = 'block';
     }
 
-    document.getElementById('inputFoto').onchange = (e) => {
+    document.getElementById('fotoIn').onchange = (e) => {
         const file = e.target.files[0];
         if(file) {
             const reader = new FileReader();
             reader.onload = (ev) => {
-                document.getElementById('boxUp').style.backgroundImage = `url(${ev.target.result})`;
+                document.getElementById('dropArea').style.backgroundImage = `url(${ev.target.result})`;
                 document.getElementById('txtUp').style.display = 'none';
             };
             reader.readAsDataURL(file);
-            if(catAtual) document.getElementById('btnScan').style.display = 'block';
+            if(catSel) document.getElementById('btnBuscar').style.display = 'block';
         }
     };
 
-    async function iniciarScan() {
-        const f = document.getElementById('inputFoto').files[0];
+    async function buscarFacial() {
+        const f = document.getElementById('fotoIn').files[0];
         const st = document.getElementById('status');
-        st.innerHTML = "⚡ MAPEANDO BIOMETRIA FACIAL...";
+        st.innerHTML = "🔍 ESCANEANDO ROSTO (LEVEL HARD)...";
 
         const fd = new FormData();
         fd.append('foto_cliente', f);
-        fd.append('categoria', catAtual);
+        fd.append('categoria', catSel);
 
         try {
             const res = await fetch(`${SERVIDOR}/buscar_para_limpar`, {
@@ -209,28 +193,26 @@
                 body: fd
             });
             const dados = await res.json();
-            mostrar(dados);
+            exibirResultados(dados);
         } catch (err) {
-            st.innerHTML = "❌ SERVIDOR OFFLINE NO PC";
+            st.innerHTML = "❌ SERVIDOR OFFLINE";
         }
     }
 
-    function mostrar(lista) {
-        const div = document.getElementById('lista');
+    function exibirResultados(lista) {
+        const div = document.getElementById('resultados');
         const st = document.getElementById('status');
         
-        st.innerHTML = lista.length > 0 ? "✅ MATCHES IDENTIFICADOS!" : "❌ NENHUM GÊMEO ENCONTRADO";
+        st.innerHTML = lista.length > 0 ? "✅ GÊMEO LOCALIZADO!" : "❌ NÃO ENCONTRADO";
         
-        div.innerHTML = lista.map(m => `
-            <div class="card-bico">
-                <img src="${SERVIDOR}/banco_de_bicos/${m.path}?v=${Date.now()}" onerror="this.src='https://placehold.jp/24/333/fff/115x115.png?text=FOTO+OFF'">
+        div.innerHTML = lista.map(res => `
+            <div class="card">
+                <img src="${SERVIDOR}/banco_de_bicos/${res.path}?v=${Date.now()}" onerror="this.src='https://placehold.jp/24/333/fff/110x110.png?text=FOTO+OFF'">
                 <div class="info">
-                    <span class="id-bico">ID: ${m.numId}</span>
-                    <span class="perc-label">Semelhança: ${m.precisao}%</span>
-                    <div class="barra-p"><div class="barra-f" style="width: ${m.precisao}%"></div></div>
-                    <a href="https://wa.me/${WHATS}?text=Olá, quero o bico do ID:${m.numId}" target="_blank" class="btn-whats">
-                        PEGAR DADOS 🌵
-                    </a>
+                    <span class="id-text">ID: ${res.numId}</span>
+                    <div class="perc-info">Semelhança: ${res.precisao}%</div>
+                    <div class="barra-fundo"><div class="barra-cor" style="width: ${res.precisao}%"></div></div>
+                    <a href="https://wa.me/${WHATS}?text=ID:${res.numId}" target="_blank" class="btn-whats">PEGAR DADOS 🌵</a>
                 </div>
             </div>
         `).join('');
