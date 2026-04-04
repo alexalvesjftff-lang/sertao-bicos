@@ -2,197 +2,213 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sertão Bicos - Sistema de Identificação</title>
+    <title>Sertão Bicos - DNA Pro Cactus</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
-        /* ESTILO ORIGINAL DO SERTÃO BICOS */
-        :root { 
-            --marrom-escuro: #283618; 
-            --marrom-claro: #bc6c25; 
-            --bege-fundo: #fefae0; 
-            --bege-card: #faedcd;
-            --verde-sertao: #606c38;
+        :root {
+            --cor-fundo: #080808; 
+            --cor-principal: #ff8c00; 
+            --cor-detalhe: #00ff00; 
+            --cor-texto: #ffffff;
+            --cor-card: #111111;
+            --cor-whats: #25d366;
         }
 
-        body { 
-            font-family: 'Courier New', Courier, monospace; 
-            background-color: var(--bege-fundo); 
-            color: var(--marrom-escuro); 
-            margin: 0; 
-            padding: 20px; 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-        }
+        body { background: var(--cor-fundo); color: var(--cor-texto); font-family: 'Segoe UI', sans-serif; margin: 0; text-align: center; }
+        header { background: #000; padding: 25px; font-size: 28px; font-weight: 900; text-transform: uppercase; border-bottom: 3px solid var(--cor-detalhe); box-shadow: 0 0 15px rgba(0, 255, 0, 0.5); }
+        
+        .msg-rapido { color: var(--cor-principal); font-weight: 800; font-size: 14px; margin-top: 10px; display: block; letter-spacing: 1px; }
 
-        .container { 
-            width: 100%; 
-            max-width: 500px; 
-            background: var(--bege-card); 
-            padding: 30px; 
-            border-radius: 5px; 
-            border: 4px solid var(--marrom-escuro); 
-            box-shadow: 15px 15px 0px var(--marrom-claro); 
-            text-align: center;
-        }
-
-        h1 { font-size: 2.5rem; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 2px; }
-        .subtitulo { font-size: 1rem; margin-bottom: 30px; border-bottom: 2px solid var(--marrom-escuro); padding-bottom: 10px; }
+        .container { max-width: 500px; margin: auto; padding: 20px; }
+        .admin-trigger { position: fixed; top: 0; left: 0; width: 60px; height: 60px; z-index: 10000; cursor: pointer; }
 
         .upload-box { 
-            border: 3px dashed var(--marrom-escuro); 
-            padding: 40px 20px; 
-            margin-bottom: 20px; 
-            cursor: pointer; 
-            background: #fffef2;
-            transition: 0.3s;
+            background: var(--cor-card); border: 3px dashed var(--cor-principal); height: 220px; border-radius: 20px; 
+            display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; 
+            position: relative; background-size: contain; background-repeat: no-repeat; background-position: center; 
+            margin-bottom: 25px; transition: all 0.3s ease; overflow: hidden; box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
         }
-        .upload-box:hover { background: #fdf2d5; }
-
-        .btn-principal { 
-            background: var(--marrom-escuro); 
-            color: white; 
-            border: none; 
-            padding: 20px; 
-            width: 100%; 
-            font-size: 1.2rem; 
-            font-weight: bold; 
-            cursor: pointer; 
-            text-transform: uppercase;
-        }
-        .btn-principal:hover { background: var(--verde-sertao); }
-
-        #resultado { 
-            margin-top: 25px; 
-            padding: 20px; 
-            border: 3px solid var(--marrom-escuro); 
-            display: none; 
-            font-weight: bold;
-            font-size: 1.1rem;
-        }
-
-        /* PAINEL ADMIN */
-        .admin-trigger { position: fixed; top: 10px; left: 10px; font-size: 30px; cursor: pointer; opacity: 0.6; }
-        .modal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 25px; border: 5px solid var(--marrom-escuro); z-index: 1000; width: 85%; max-width: 350px; box-shadow: 0 0 50px rgba(0,0,0,0.5); }
-        .overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 999; }
         
-        .cat-group { display: flex; justify-content: space-between; margin: 15px 0; }
-        .cat-btn { background: #ddd; border: 2px solid var(--marrom-escuro); padding: 10px; width: 48%; cursor: pointer; font-weight: bold; }
-        .cat-btn.active { background: var(--marrom-claro); color: white; }
+        .upload-box:hover { border-color: var(--cor-detalhe); background-color: #1a1a1a; }
+        .upload-box::before { content: "🌵"; display: var(--display-icone, block); font-size: 45px; filter: drop-shadow(0 0 10px var(--cor-detalhe)); margin-bottom: 10px; }
+        .upload-box input { position: absolute; inset: 0; opacity: 0; cursor: pointer; z-index: 2; }
 
-        input[type="password"], input[type="file"] { width: 100%; padding: 10px; margin: 10px 0; box-sizing: border-box; }
+        .category-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 25px; }
+        .cat-btn { background: #1a1a1a; border: 2px solid var(--cor-principal); padding: 18px; border-radius: 12px; color: white; font-weight: bold; cursor: pointer; }
+        .cat-btn.active { background: var(--cor-principal); border-color: #fff; }
+
+        button#btnBuscar { 
+            background: linear-gradient(45deg, #1e8449, #27ae60); color: white; border: none; padding: 18px; 
+            font-size: 19px; border-radius: 50px; cursor: pointer; font-weight: 900; width: 100%; display: none; margin-bottom: 20px;
+        }
+
+        #status { margin-top: 10px; font-weight: bold; color: var(--cor-detalhe); }
+        #avisoMescla { display: none; background: #d35400; color: white; padding: 15px; border-radius: 10px; margin: 15px 0; font-weight: bold; font-size: 14px; border: 2px solid #fff; line-height: 1.4; }
+
+        #resultados { display: flex; flex-direction: column; gap: 12px; padding-bottom: 90px; }
+        .card { background: var(--cor-card); border-radius: 15px; padding: 15px; display: flex; align-items: center; gap: 15px; border: 1px solid #333; }
+        .card img { width: 100px; height: 100px; border-radius: 10px; border: 2px solid var(--cor-principal); object-fit: cover; }
+
+        .copy-id-btn { background: var(--cor-principal); color: #000; padding: 6px 12px; border-radius: 6px; font-weight: 900; cursor: pointer; display: inline-block; margin: 5px 0; font-size: 14px; box-shadow: 0 2px 5px rgba(0,0,0,0.5); }
+        .btn-whats { background: var(--cor-whats); color: white; padding: 10px 15px; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 14px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; margin-top: 8px; border: none; cursor: pointer; box-shadow: 0 4px 10px rgba(37, 211, 102, 0.4); width: 100%; }
+
+        #adminPanel { display: none; background: #fdf2e2; border: 2px solid #333; padding: 25px; position: fixed; inset: 10px; z-index: 10001; border-radius: 15px; text-align: left; overflow-y: auto; color: #333; }
+        .admin-input { width: 100%; padding: 12px; margin: 10px 0; border-radius: 8px; border: 1px solid #ccc; box-sizing: border-box; }
+        .btn-acao { color:white; width:100%; padding:15px; border:none; border-radius:8px; font-weight:bold; cursor:pointer; margin-top:10px; }
+        #modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 20000; align-items: center; justify-content: center; }
+        #modal img { max-width: 90%; max-height: 80%; border: 3px solid var(--cor-detalhe); }
     </style>
 </head>
 <body>
 
-    <div class="admin-trigger" onclick="abrirAdmin()">🌵</div>
+<div class="admin-trigger" onclick="abrirAdmin()"></div>
+<header>🌵 SERTÃO BICOS 🌵</header>
+<span class="msg-rapido">🌵 ENCONTRE SEU BICO NO PC 🌵</span>
 
-    <div class="container">
-        <h1>Sertão Bicos</h1>
-        <div class="subtitulo">Tecnologia de Cabra Macho</div>
-
-        <div class="upload-box" onclick="document.getElementById('foto_cliente').click()">
-            <strong id="status_upload">📷 TOQUE PARA SUBIR A FOTO</strong>
-            <input type="file" id="foto_cliente" hidden onchange="atualizarTexto()">
-        </div>
-
-        <button class="btn-principal" onclick="procurarBico()">🔍 PROCURAR BICO AGORA</button>
-
-        <div id="resultado"></div>
+<div class="container">
+    <div class="upload-box" id="dropArea">
+        <span style="font-weight:bold; letter-spacing: 1px;" id="labelUpload">TOQUE PARA ENVIAR A FOTO</span>
+        <input type="file" id="fotoCliente" accept="image/*">
     </div>
 
-    <div class="overlay" id="overlay" onclick="fecharAdmin()"></div>
-    <div class="modal" id="modalAdmin">
-        <h3>Painel do Capitão</h3>
-        <input type="password" id="senha" placeholder="Senha Secreta">
-        <div class="cat-group">
-            <button class="cat-btn active" id="btnCarro" onclick="selecionarCat('CARRO')">CARRO</button>
-            <button class="cat-btn" id="btnAmbos" onclick="selecionarCat('AMBOS')">AMBOS</button>
-        </div>
-        <input type="file" id="foto_cadastro">
-        <button class="btn-principal" onclick="cadastrarBico()" style="background: var(--marrom-claro);">✅ SALVAR NO BANCO</button>
+    <div class="category-grid">
+        <div class="cat-btn" id="btnCarro" onclick="selecionarCat('CARRO')">🚗 CARRO</div>
+        <div class="cat-btn" id="btnAmbos" onclick="selecionarCat('AMBOS')">🚗🏍️ AMBOS</div>
     </div>
 
-    <script>
-        // CONFIGURAÇÕES
-        const URL_SERVIDOR = "https://undelegated-notarial-lessie.ngrok-free.dev";
-        let categoriaGlobal = "CARRO";
+    <button id="btnBuscar" onclick="enviarParaServidor()">PROCURAR BICO</button>
+    <div id="status"></div>
+    <div id="avisoMescla">⚠️ TESTE O BICO ANTES VEJA SE DA MESCLA!</div>
+    <div id="resultados"></div>
+</div>
 
-        function atualizarTexto() {
-            const file = document.getElementById('foto_cliente').files[0];
-            if(file) document.getElementById('status_upload').innerText = "✅ " + file.name;
+<div id="modal" onclick="this.style.display='none'"><img id="imgModal" src=""></div>
+
+<div id="adminPanel">
+    <h3>🌵 Gestão Sertão Bicos</h3>
+    <hr>
+    <h4>Novo Cadastro</h4>
+    <select id="adminCat" class="admin-input"><option value="CARRO">CARRO</option><option value="AMBOS">AMBOS</option></select>
+    <input type="file" id="fotosPasta" class="admin-input" multiple>
+    <button id="btnCadastrarLote" onclick="cadastrarNoServidor()" class="btn-acao" style="background:#27ae60;">CADASTRAR NO PC</button>
+    <button onclick="document.getElementById('adminPanel').style.display='none'" class="btn-acao" style="background:#777;">SAIR</button>
+</div>
+
+<script>
+// --- CONFIGURAÇÃO ---
+// SUBSTITUA PELO SEU LINK DO NGROK:
+const URL_SERVIDOR = "https://COLE_AQUI_O_LINK_DO_NGROK.ngrok-free.app"; 
+const WHATSAPP_NUMERO = "5511930927753";
+let categoriaSelecionada = '';
+
+// --- LÓGICA DO CLIENTE ---
+function selecionarCat(cat) {
+    categoriaSelecionada = cat;
+    document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById(cat === 'CARRO' ? 'btnCarro' : 'btnAmbos').classList.add('active');
+    if(document.getElementById('fotoCliente').files[0]) document.getElementById('btnBuscar').style.display = 'block';
+}
+
+document.getElementById('fotoCliente').onchange = (e) => {
+    const file = e.target.files[0];
+    if(file) {
+        const reader = new FileReader();
+        reader.onload = (event) => {
+            const dropArea = document.getElementById('dropArea');
+            dropArea.style.backgroundImage = `url(${event.target.result})`;
+            dropArea.style.setProperty('--display-icone', 'none'); 
+            document.getElementById('labelUpload').style.display = 'none';
+        };
+        reader.readAsDataURL(file);
+        if(categoriaSelecionada) document.getElementById('btnBuscar').style.display = 'block';
+    }
+};
+
+async function enviarParaServidor() {
+    const file = document.getElementById('fotoCliente').files[0];
+    if(!file) return alert("Selecione uma foto!");
+
+    document.getElementById('status').innerHTML = "🌵 <b>IA PROCESSANDO NO SERVIDOR...</b> 🌵";
+    document.getElementById('resultados').innerHTML = "";
+
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = async () => {
+        try {
+            const res = await fetch(`${URL_SERVIDOR}/buscar`, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    image: reader.result,
+                    categoria: categoriaSelecionada
+                })
+            });
+
+            const dados = await res.json();
+            exibirResultados(dados);
+        } catch (err) {
+            document.getElementById('status').innerText = "Erro ao conectar com o servidor!";
         }
+    };
+}
 
-        function abrirAdmin() {
-            document.getElementById('modalAdmin').style.display = 'block';
-            document.getElementById('overlay').style.display = 'block';
-        }
+function exibirResultados(lista) {
+    document.getElementById('status').innerHTML = lista.length > 0 ? "✅ <b>BUSCA CONCLUÍDA!</b>" : "❌ <b>NENHUM BICO ENCONTRADO</b>";
+    document.getElementById('avisoMescla').style.display = "block";
+    
+    document.getElementById('resultados').innerHTML = lista.map(res => {
+        const linkZap = `https://wa.me/${WHATSAPP_NUMERO}?text=ID:${res.numId}`;
+        return `<div class="card">
+            <img src="${res.foto}" onclick="zoom('${res.foto}')">
+            <div style="text-align:left; flex-grow:1">
+                <b style="color:var(--cor-detalhe);">${res.score}% Match</b><br>
+                <div class="copy-id-btn" onclick="navigator.clipboard.writeText('${res.numId}'); alert('ID Copiado!');">ID: ${res.numId} 📋</div><br>
+                <a href="${linkZap}" target="_blank" class="btn-whats">PEGAR DADOS 🌵</a>
+            </div>
+        </div>`;
+    }).join('');
+}
 
-        function fecharAdmin() {
-            document.getElementById('modalAdmin').style.display = 'none';
-            document.getElementById('overlay').style.display = 'none';
-        }
+// --- LÓGICA ADMIN ---
+function abrirAdmin() { if(prompt("Senha:") === "9122") document.getElementById('adminPanel').style.display = 'block'; }
 
-        // CORREÇÃO DA FUNÇÃO QUE ESTAVA DANDO ERRO
-        function selecionarCat(cat) {
-            categoriaGlobal = cat;
-            document.getElementById('btnCarro').classList.remove('active');
-            document.getElementById('btnAmbos').classList.remove('active');
-            
-            if(cat === 'CARRO') document.getElementById('btnCarro').classList.add('active');
-            else document.getElementById('btnAmbos').classList.add('active');
-        }
+async function cadastrarNoServidor() {
+    const files = Array.from(document.getElementById('fotosPasta').files);
+    const cat = document.getElementById('adminCat').value;
+    const btn = document.getElementById('btnCadastrarLote');
+    
+    if (files.length === 0) return alert("Selecione fotos!");
+    btn.innerText = "ENVIANDO AO PC...";
+    btn.disabled = true;
 
-        async function procurarBico() {
-            const foto = document.getElementById('foto_cliente').files[0];
-            if(!foto) return alert("Suba a foto do cliente primeiro!");
+    for (let file of files) {
+        let idFinal = file.name.replace(/\D/g, '').substring(0,6);
+        const reader = new FileReader();
+        
+        const promessa = new Promise(resolve => {
+            reader.readAsDataURL(file);
+            reader.onload = async () => {
+                await fetch(`${URL_SERVIDOR}/cadastrar`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        image: reader.result,
+                        numId: idFinal,
+                        categoria: cat
+                    })
+                });
+                resolve();
+            };
+        });
+        await promessa;
+    }
+    
+    btn.innerText = "CADASTRAR NO PC";
+    btn.disabled = false;
+    alert("Processo Finalizado!");
+}
 
-            const resDiv = document.getElementById('resultado');
-            resDiv.style.display = "block";
-            resDiv.style.background = "#fff";
-            resDiv.innerText = "⏳ O Sertão está procurando... Aguarde.";
-
-            const formData = new FormData();
-            formData.append('foto', foto);
-
-            try {
-                const response = await fetch(`${URL_SERVIDOR}/procurar`, { method: 'POST', body: formData });
-                const data = await response.json();
-
-                if(data.encontrado) {
-                    resDiv.style.background = "var(--marrom-escuro)";
-                    resDiv.style.color = "white";
-                    resDiv.innerHTML = `✅ BICO ENCONTRADO!<br><span style="font-size: 1.5rem">${data.nome}</span><br>Precisão: ${data.distancia}%`;
-                } else {
-                    resDiv.style.background = "var(--marrom-claro)";
-                    resDiv.style.color = "white";
-                    resDiv.innerText = "❌ Esse bico não consta no nosso banco!";
-                }
-            } catch (err) {
-                resDiv.innerText = "⚠️ ERRO: Seu PC está offline ou o Ngrok mudou.";
-            }
-        }
-
-        async function cadastrarBico() {
-            const senha = document.getElementById('senha').value;
-            const foto = document.getElementById('foto_cadastro').files[0];
-
-            if(senha !== "9122") return alert("Senha errada, parceiro!");
-            if(!foto) return alert("Escolha a foto do bico!");
-
-            const formData = new FormData();
-            formData.append('foto', foto);
-            formData.append('categoria', categoriaGlobal);
-
-            try {
-                const response = await fetch(`${URL_SERVIDOR}/cadastrar`, { method: 'POST', body: formData });
-                const data = await response.json();
-                alert(data.mensagem);
-                fecharAdmin();
-            } catch (err) {
-                alert("Erro ao conectar com o seu PC.");
-            }
-        }
-    </script>
+function zoom(src) { document.getElementById('imgModal').src = src; document.getElementById('modal').style.display = 'flex'; }
+</script>
 </body>
 </html>
