@@ -2,128 +2,246 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Sertão Bicos | Biometria Facial</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <title>Sertão Bicos - DNA Pro Cactus</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&display=swap');
-        body { font-family: 'Oswald', sans-serif; background-color: #000; color: #fff; }
-        .btn-sertao { background: linear-gradient(45deg, #f39c12, #d35400); transition: 0.3s; }
-        .btn-sertao:active { transform: scale(0.95); }
-        .card-bico { border: 1px solid #333; background: #111; border-radius: 15px; overflow: hidden; }
-        #camera-preview { transform: scaleX(-1); border: 3px solid #f39c12; border-radius: 20px; }
-        .loading-pulse { animation: pulse 1.5s infinite; }
-        @keyframes pulse { 0% { opacity: 0.5; } 50% { opacity: 1; } 100% { opacity: 0.5; } }
+        :root {
+            --cor-fundo: #080808; 
+            --cor-principal: #ff8c00; 
+            --cor-detalhe: #00ff00; 
+            --cor-texto: #ffffff;
+            --cor-card: #111111;
+            --cor-whats: #25d366;
+        }
+
+        body { background: var(--cor-fundo); color: var(--cor-texto); font-family: 'Segoe UI', sans-serif; margin: 0; text-align: center; }
+        header { background: #000; padding: 25px; font-size: 28px; font-weight: 900; text-transform: uppercase; border-bottom: 3px solid var(--cor-detalhe); box-shadow: 0 0 15px rgba(0, 255, 0, 0.5); }
+        
+        .msg-rapido { color: var(--cor-principal); font-weight: 800; font-size: 14px; margin-top: 10px; display: block; letter-spacing: 1px; }
+
+        .container { max-width: 500px; margin: auto; padding: 20px; }
+        .admin-trigger { position: fixed; top: 0; left: 0; width: 60px; height: 60px; z-index: 10000; cursor: pointer; }
+
+        .upload-box { 
+            background: var(--cor-card); border: 3px dashed var(--cor-principal); height: 220px; border-radius: 20px; 
+            display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; 
+            position: relative; background-size: cover; background-repeat: no-repeat; background-position: center; 
+            margin-bottom: 25px; transition: all 0.3s ease; overflow: hidden; box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
+        }
+        
+        .upload-box:hover { border-color: var(--cor-detalhe); background-color: #1a1a1a; }
+        .upload-box::before { content: "🌵"; display: var(--display-icone, block); font-size: 45px; filter: drop-shadow(0 0 10px var(--cor-detalhe)); margin-bottom: 10px; }
+        .upload-box input { position: absolute; inset: 0; opacity: 0; cursor: pointer; z-index: 2; }
+
+        .category-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 25px; }
+        .cat-btn { background: #1a1a1a; border: 2px solid var(--cor-principal); padding: 18px; border-radius: 12px; color: white; font-weight: bold; cursor: pointer; transition: 0.2s; }
+        .cat-btn.active { background: var(--cor-principal); border-color: #fff; transform: scale(1.05); }
+
+        button#btnBuscar { 
+            background: linear-gradient(45deg, #1e8449, #27ae60); color: white; border: none; padding: 18px; 
+            font-size: 19px; border-radius: 50px; cursor: pointer; font-weight: 900; width: 100%; display: none; margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(39, 174, 96, 0.4);
+        }
+
+        #status { margin-top: 10px; font-weight: bold; color: var(--cor-detalhe); }
+        #avisoMescla { display: none; background: #d35400; color: white; padding: 15px; border-radius: 10px; margin: 15px 0; font-weight: bold; font-size: 14px; border: 2px solid #fff; line-height: 1.4; }
+
+        #resultados { display: flex; flex-direction: column; gap: 12px; padding-bottom: 90px; }
+        .card { background: var(--cor-card); border-radius: 15px; padding: 15px; display: flex; align-items: center; gap: 15px; border: 1px solid #333; animation: fadeIn 0.5s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .card img { width: 100px; height: 100px; border-radius: 10px; border: 2px solid var(--cor-principal); object-fit: cover; }
+
+        .copy-id-btn { background: var(--cor-principal); color: #000; padding: 6px 12px; border-radius: 6px; font-weight: 900; cursor: pointer; display: inline-block; margin: 5px 0; font-size: 14px; box-shadow: 0 2px 5px rgba(0,0,0,0.5); }
+        .btn-whats { background: var(--cor-whats); color: white; padding: 10px 15px; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 14px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; margin-top: 8px; border: none; cursor: pointer; box-shadow: 0 4px 10px rgba(37, 211, 102, 0.4); width: 100%; }
+
+        #adminPanel { display: none; background: #fdf2e2; border: 2px solid #333; padding: 25px; position: fixed; inset: 10px; z-index: 10001; border-radius: 15px; text-align: left; overflow-y: auto; color: #333; }
+        .admin-input { width: 100%; padding: 12px; margin: 10px 0; border-radius: 8px; border: 1px solid #ccc; box-sizing: border-box; }
+        .btn-acao { color:white; width:100%; padding:15px; border:none; border-radius:8px; font-weight:bold; cursor:pointer; margin-top:10px; }
+        #modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 20000; align-items: center; justify-content: center; }
+        #modal img { max-width: 90%; max-height: 80%; border: 3px solid var(--cor-detalhe); }
     </style>
 </head>
-<body class="p-4">
+<body>
 
-    <header class="text-center py-6">
-        <h1 class="text-4xl font-bold text-orange-500 uppercase italic">🌵 Sertão Bicos</h1>
-        <p class="text-gray-400 text-sm">ENCONTRE SEU BICO PELA FACE</p>
-    </header>
+<div class="admin-trigger" onclick="abrirAdmin()"></div>
+<header>🌵 SERTÃO BICOS 🌵</header>
+<span class="msg-rapido">🌵 ENCONTRE SEU BICO NO PC 🌵</span>
 
-    <div class="max-w-md mx-auto relative mb-6">
-        <video id="video" width="100%" height="auto" autoplay playsinline class="bg-gray-900 shadow-2xl shadow-orange-900/20"></video>
-        <canvas id="canvas" class="hidden"></canvas>
+<div class="container">
+    <div class="upload-box" id="dropArea">
+        <span style="font-weight:bold; letter-spacing: 1px;" id="labelUpload">TOQUE PARA ENVIAR A FOTO</span>
+        <input type="file" id="fotoCliente" accept="image/*">
+    </div>
+
+    <div class="category-grid">
+        <div class="cat-btn" id="btnCarro" onclick="selecionarCat('CARRO')">🚗 CARRO</div>
+        <div class="cat-btn" id="btnAmbos" onclick="selecionarCat('AMBOS')">🚗🏍️ AMBOS</div>
+    </div>
+
+    <button id="btnBuscar" onclick="enviarParaServidor()">PROCURAR BICO AGORA</button>
+    <div id="status"></div>
+    <div id="avisoMescla">⚠️ TESTE O BICO ANTES VEJA SE DA MESCLA!</div>
+    <div id="resultados"></div>
+</div>
+
+<div id="modal" onclick="this.style.display='none'"><img id="imgModal" src=""></div>
+
+<div id="adminPanel">
+    <h3>🌵 Gestão Sertão Bicos</h3>
+    <hr>
+    <h4>Novo Cadastro</h4>
+    <select id="adminCat" class="admin-input"><option value="CARRO">CARRO</option><option value="AMBOS">AMBOS</option></select>
+    <input type="file" id="fotosPasta" class="admin-input" multiple>
+    <button id="btnCadastrarLote" onclick="cadastrarNoServidor()" class="btn-acao" style="background:#27ae60;">CADASTRAR NO PC</button>
+    <button onclick="document.getElementById('adminPanel').style.display='none'" class="btn-acao" style="background:#777;">SAIR</button>
+</div>
+
+<script>
+// --- CONFIGURAÇÃO ---
+// ATENÇÃO: SEMPRE COLOQUE O LINK ATUAL DO NGROK AQUI!
+const URL_SERVIDOR = "https://COLE_AQUI_O_LINK_DO_NGROK.ngrok-free.app"; 
+const WHATSAPP_NUMERO = "5511930927753";
+let categoriaSelecionada = '';
+
+// --- LÓGICA DO CLIENTE ---
+function selecionarCat(cat) {
+    categoriaSelecionada = cat;
+    document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById(cat === 'CARRO' ? 'btnCarro' : 'btnAmbos').classList.add('active');
+    
+    // Mostra o botão de busca se já tiver foto
+    if(document.getElementById('fotoCliente').files[0]) {
+        document.getElementById('btnBuscar').style.display = 'block';
+    }
+}
+
+document.getElementById('fotoCliente').onchange = (e) => {
+    const file = e.target.files[0];
+    if(file) {
+        const reader = new FileReader();
+        reader.onload = (event) => {
+            const dropArea = document.getElementById('dropArea');
+            dropArea.style.backgroundImage = `url(${event.target.result})`;
+            dropArea.style.setProperty('--display-icone', 'none'); 
+            document.getElementById('labelUpload').style.display = 'none';
+        };
+        reader.readAsDataURL(file);
         
-        <div class="absolute inset-0 border-[2px] border-dashed border-orange-500/30 rounded-2xl m-8 pointer-events-none"></div>
-    </div>
+        // Só mostra o botão se a categoria já estiver marcada
+        if(categoriaSelecionada) {
+            document.getElementById('btnBuscar').style.display = 'block';
+        } else {
+            alert("Agora escolha a categoria: CARRO ou AMBOS");
+        }
+    }
+};
 
-    <div class="max-w-md mx-auto space-y-4">
-        <button id="btn-buscar" class="btn-sertao w-full py-5 rounded-2xl text-2xl font-bold uppercase shadow-lg">
-            <i class="fas fa-camera mr-2"></i> BUSCAR BICO AGORA
-        </button>
+async function enviarParaServidor() {
+    const fileInput = document.getElementById('fotoCliente');
+    const file = fileInput.files[0];
+    if(!file) return alert("Selecione uma foto primeiro!");
+    if(!categoriaSelecionada) return alert("Selecione a categoria!");
 
-        <div id="status-msg" class="text-center text-orange-400 font-bold hidden">
-            <span class="loading-pulse">🔍 PROCESSANDO NA FILA... AGUARDE</span>
-        </div>
-    </div>
+    const btn = document.getElementById('btnBuscar');
+    btn.disabled = true;
+    btn.innerText = "⏳ PROCESSANDO IA...";
+    document.getElementById('status').innerHTML = "🌵 <b>ANALISANDO ROSTO NO PC...</b> 🌵";
+    document.getElementById('resultados').innerHTML = "";
 
-    <div class="max-w-md mx-auto mt-10">
-        <h2 class="text-xl border-b-2 border-orange-600 mb-4 pb-2">🎯 RESULTADOS ENCONTRADOS</h2>
-        <div id="lista-resultados" class="grid grid-cols-1 gap-4">
-            <p class="text-gray-600 text-center py-10">Nenhum bico buscado ainda.</p>
-        </div>
-    </div>
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = async () => {
+        try {
+            const res = await fetch(`${URL_SERVIDOR}/buscar`, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    image: reader.result,
+                    categoria: categoriaSelecionada
+                })
+            });
 
-    <script>
-        // --- CONFIGURAÇÃO DO SERVIDOR (COLE SEU LINK DO NGROK AQUI) ---
-        const URL_SERVIDOR = "https://undelegated-notarial-lessie.ngrok-free.dev";
+            const dados = await res.json();
+            exibirResultados(dados);
+        } catch (err) {
+            document.getElementById('status').innerText = "❌ Servidor Offline! Ligue o Ngrok e o Python.";
+            console.error(err);
+        } finally {
+            btn.disabled = false;
+            btn.innerText = "PROCURAR BICO AGORA";
+        }
+    };
+}
 
-        const video = document.getElementById('video');
-        const canvas = document.getElementById('canvas');
-        const btnBuscar = document.getElementById('btn-buscar');
-        const statusMsg = document.getElementById('status-msg');
-        const listaResultados = document.getElementById('lista-resultados');
+function exibirResultados(lista) {
+    document.getElementById('status').innerHTML = lista.length > 0 ? "✅ <b>MATCH ENCONTRADO!</b>" : "❌ <b>NENHUM BICO NESSA CATEGORIA</b>";
+    document.getElementById('avisoMescla').style.display = "block";
+    
+    document.getElementById('resultados').innerHTML = lista.map(res => {
+        const linkZap = `https://wa.me/${WHATSAPP_NUMERO}?text=Olá, quero os dados do Bico ID:${res.numId}`;
+        return `
+        <div class="card">
+            <img src="${res.foto}" onclick="zoom('${res.foto}')">
+            <div style="text-align:left; flex-grow:1">
+                <b style="color:var(--cor-detalhe);">${res.score}% de Semelhança</b><br>
+                <div class="copy-id-btn" onclick="navigator.clipboard.writeText('${res.numId}'); alert('ID Copiado!');">ID: ${res.numId} 📋</div><br>
+                <a href="${linkZap}" target="_blank" class="btn-whats">PEGAR DADOS NO ZAP 🌵</a>
+            </div>
+        </div>`;
+    }).join('');
+}
 
-        // Iniciar Câmera do Celular
-        navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" }, audio: false })
-            .then(stream => { video.srcObject = stream; })
-            .catch(err => { alert("Erro ao abrir câmera: " + err); });
+// --- LÓGICA ADMIN ---
+function abrirAdmin() { 
+    if(prompt("Senha do Sertão:") === "9122") {
+        document.getElementById('adminPanel').style.display = 'block';
+    } 
+}
 
-        btnBuscar.addEventListener('click', async () => {
-            // 1. Interface de Carregamento
-            btnBuscar.disabled = true;
-            btnBuscar.classList.add('opacity-50');
-            statusMsg.classList.remove('hidden');
-            listaResultados.innerHTML = "";
+async function cadastrarNoServidor() {
+    const files = Array.from(document.getElementById('fotosPasta').files);
+    const cat = document.getElementById('adminCat').value;
+    const btn = document.getElementById('btnCadastrarLote');
+    
+    if (files.length === 0) return alert("Selecione as fotos para o banco!");
+    btn.innerText = "🚀 ENVIANDO PARA O PC...";
+    btn.disabled = true;
 
-            // 2. Captura a Foto
-            const context = canvas.getContext('2d');
-            canvas.width = video.videoWidth;
-            canvas.height = video.videoHeight;
-            context.drawImage(video, 0, 0, canvas.width, canvas.height);
-            
-            canvas.toBlob(async (blob) => {
-                const formData = new FormData();
-                formData.append('foto_cliente', blob, 'face.jpg');
-                formData.append('categoria', 'GERAL');
+    for (let file of files) {
+        let idFinal = file.name.replace(/\D/g, '').substring(0,10); // Pega os números do nome do arquivo
+        if(!idFinal) idFinal = Math.floor(Math.random() * 100000);
 
+        const reader = new FileReader();
+        const promessa = new Promise(resolve => {
+            reader.readAsDataURL(file);
+            reader.onload = async () => {
                 try {
-                    // 3. Envia para o Python (Fila de Espera)
-                    const response = await fetch(`${URL_SERVIDOR}/buscar_para_limpar`, {
+                    await fetch(`${URL_SERVIDOR}/cadastrar`, {
                         method: 'POST',
-                        body: formData
+                        headers: {'Content-Type': 'application/json'},
+                        body: JSON.stringify({
+                            image: reader.result,
+                            numId: idFinal,
+                            categoria: cat
+                        })
                     });
-
-                    const bicos = await response.json();
-
-                    // 4. Exibe os Resultados
-                    statusMsg.classList.add('hidden');
-                    btnBuscar.disabled = false;
-                    btnBuscar.classList.remove('opacity-50');
-
-                    if (bicos.length === 0) {
-                        listaResultados.innerHTML = "<p class='text-center text-red-500'>Nenhum bico compatível encontrado.</p>";
-                        return;
-                    }
-
-                    bicos.forEach(bico => {
-                        const htmlCard = `
-                            <div class="card-bico flex items-center p-3 animate__animated animate__fadeInUp">
-                                <img src="${URL_SERVIDOR}/banco_de_bicos/${bico.path}" class="w-20 h-20 object-cover rounded-lg border border-orange-500">
-                                <div class="ml-4">
-                                    <h3 class="text-orange-500 text-lg font-bold">ID: ${bico.numId}</h3>
-                                    <p class="text-sm text-gray-400">Precisão: ${bico.precisao}%</p>
-                                    <div class="mt-1 w-24 h-1 bg-gray-800 rounded-full">
-                                        <div class="h-full bg-green-500 rounded-full" style="width: ${bico.precisao}%"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        `;
-                        listaResultados.innerHTML += htmlCard;
-                    });
-
-                } catch (error) {
-                    alert("Erro de Conexão: Verifique se o Ngrok está online!");
-                    btnBuscar.disabled = false;
-                    statusMsg.classList.add('hidden');
-                }
-            }, 'image/jpeg', 0.8);
+                } catch(e) { console.error("Erro no cadastro:", e); }
+                resolve();
+            };
         });
-    </script>
+        await promessa;
+    }
+    
+    btn.innerText = "CADASTRAR NO PC";
+    btn.disabled = false;
+    alert("Banco de dados atualizado com sucesso!");
+    document.getElementById('adminPanel').style.display = 'none';
+}
 
+function zoom(src) { 
+    document.getElementById('imgModal').src = src; 
+    document.getElementById('modal').style.display = 'flex'; 
+}
+</script>
 </body>
 </html>
