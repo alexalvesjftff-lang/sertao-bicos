@@ -15,102 +15,47 @@
         }
 
         body { background: var(--cor-fundo); color: var(--cor-texto); font-family: 'Segoe UI', sans-serif; margin: 0; text-align: center; }
-        
-        /* CABEÇALHO NEON QUE VOCÊ PEDIU */
-        header { 
-            background: #000; 
-            padding: 25px; 
-            font-size: 28px; 
-            font-weight: 900; 
-            text-transform: uppercase; 
-            border-bottom: 3px solid var(--cor-detalhe); 
-            box-shadow: 0 0 15px rgba(0, 255, 0, 0.5); 
-        }
+        header { background: #000; padding: 25px; font-size: 28px; font-weight: 900; text-transform: uppercase; border-bottom: 3px solid var(--cor-detalhe); box-shadow: 0 0 15px rgba(0, 255, 0, 0.5); }
         
         .msg-rapido { color: var(--cor-principal); font-weight: 800; font-size: 14px; margin-top: 10px; display: block; letter-spacing: 1px; }
 
         .container { max-width: 500px; margin: auto; padding: 20px; }
-        
-        /* ÁREA DE UPLOAD COM O CACTUS NEON */
+
+        /* BOX DE UPLOAD ORIGINAL */
         .upload-box { 
-            background: var(--cor-card); 
-            border: 3px dashed var(--cor-principal); 
-            height: 220px; 
-            border-radius: 20px; 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            justify-content: center; 
-            cursor: pointer; 
-            position: relative; 
-            background-size: cover; 
-            background-repeat: no-repeat; 
-            background-position: center; 
-            margin-bottom: 25px; 
-            transition: all 0.3s ease; 
-            overflow: hidden; 
-            box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
+            background: var(--cor-card); border: 3px dashed var(--cor-principal); height: 220px; border-radius: 20px; 
+            display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; 
+            position: relative; background-size: contain; background-repeat: no-repeat; background-position: center; 
+            margin-bottom: 25px; transition: all 0.3s ease; overflow: hidden; box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
         }
         
-        .upload-box::before { 
-            content: "🌵"; 
-            display: var(--display-icone, block); 
-            font-size: 45px; 
-            filter: drop-shadow(0 0 10px var(--cor-detalhe)); 
-            margin-bottom: 10px; 
-        }
-        
+        .upload-box::before { content: "🌵"; display: var(--display-icone, block); font-size: 45px; filter: drop-shadow(0 0 10px var(--cor-detalhe)); margin-bottom: 10px; }
         .upload-box input { position: absolute; inset: 0; opacity: 0; cursor: pointer; z-index: 2; }
 
-        /* GRID DE CATEGORIAS IGUAL AO SEU */
+        /* BOTÕES DE CATEGORIA QUADRADOS */
         .category-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 25px; }
-        .cat-btn { 
-            background: #1a1a1a; 
-            border: 2px solid var(--cor-principal); 
-            padding: 18px; 
-            border-radius: 12px; 
-            color: white; 
-            font-weight: bold; 
-            cursor: pointer; 
-        }
+        .cat-btn { background: #1a1a1a; border: 2px solid var(--cor-principal); padding: 18px; border-radius: 12px; color: white; font-weight: bold; cursor: pointer; }
         .cat-btn.active { background: var(--cor-principal); border-color: #fff; }
 
-        /* BOTÃO DE BUSCA VERDE ESTILO WHATS */
+        /* BOTÃO DE BUSCA VERDE */
         button#btnBuscar { 
-            background: linear-gradient(45deg, #1e8449, #27ae60); 
-            color: white; 
-            border: none; 
-            padding: 18px; 
-            font-size: 19px; 
-            border-radius: 50px; 
-            cursor: pointer; 
-            font-weight: 900; 
-            width: 100%; 
-            display: none; 
-            margin-bottom: 20px;
+            background: linear-gradient(45deg, #1e8449, #27ae60); color: white; border: none; padding: 18px; 
+            font-size: 19px; border-radius: 50px; cursor: pointer; font-weight: 900; width: 100%; display: none; margin-bottom: 20px;
         }
 
         #status { margin-top: 10px; font-weight: bold; color: var(--cor-detalhe); }
-        #avisoMescla { display: none; background: #d35400; color: white; padding: 15px; border-radius: 10px; margin: 15px 0; font-weight: bold; font-size: 14px; border: 2px solid #fff; }
+        #avisoMescla { display: none; background: #d35400; color: white; padding: 15px; border-radius: 10px; margin: 15px 0; font-weight: bold; font-size: 14px; border: 2px solid #fff; line-height: 1.4; }
 
-        /* CARDS DE RESULTADOS IGUAIS AOS SEUS */
+        /* CARDS DE RESULTADO */
         #resultados { display: flex; flex-direction: column; gap: 12px; padding-bottom: 90px; }
-        .card { 
-            background: var(--cor-card); 
-            border-radius: 15px; 
-            padding: 15px; 
-            display: flex; 
-            align-items: center; 
-            gap: 15px; 
-            border: 1px solid #333; 
-        }
+        .card { background: var(--cor-card); border-radius: 15px; padding: 15px; display: flex; align-items: center; gap: 15px; border: 1px solid #333; }
         .card img { width: 100px; height: 100px; border-radius: 10px; border: 2px solid var(--cor-principal); object-fit: cover; }
 
-        .copy-id-btn { background: var(--cor-principal); color: #000; padding: 6px 12px; border-radius: 6px; font-weight: 900; cursor: pointer; display: inline-block; margin: 5px 0; font-size: 14px; }
-        .btn-whats { background: var(--cor-whats); color: white; padding: 10px 15px; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 14px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; margin-top: 8px; width: 100%; }
+        .copy-id-btn { background: var(--cor-principal); color: #000; padding: 6px 12px; border-radius: 6px; font-weight: 900; cursor: pointer; display: inline-block; margin: 5px 0; font-size: 14px; box-shadow: 0 2px 5px rgba(0,0,0,0.5); }
+        .btn-whats { background: var(--cor-whats); color: white; padding: 10px 15px; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 14px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; margin-top: 8px; border: none; cursor: pointer; box-shadow: 0 4px 10px rgba(37, 211, 102, 0.4); width: 100%; }
 
         #modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 20000; align-items: center; justify-content: center; }
-        #modal img { max-width: 90%; border: 3px solid var(--cor-detalhe); }
+        #modal img { max-width: 90%; max-height: 80%; border: 3px solid var(--cor-detalhe); }
     </style>
 </head>
 <body>
@@ -130,7 +75,6 @@
     </div>
 
     <button id="btnBuscar" onclick="enviarParaServidor()">PROCURAR BICO</button>
-    
     <div id="status"></div>
     <div id="avisoMescla">⚠️ TESTE O BICO ANTES VEJA SE DA MESCLA!</div>
     
@@ -140,7 +84,7 @@
 <div id="modal" onclick="this.style.display='none'"><img id="imgModal" src=""></div>
 
 <script>
-// --- AJUSTE O LINK DO NGROK AQUI ---
+// --- LINK DO NGROK (COLE O SEU AQUI) ---
 const URL_SERVIDOR = "https://COLE_AQUI_O_LINK_DO_NGROK.ngrok-free.app"; 
 const WHATSAPP_NUMERO = "5511930927753";
 let categoriaSelecionada = '';
@@ -169,9 +113,9 @@ document.getElementById('fotoCliente').onchange = (e) => {
 
 async function enviarParaServidor() {
     const file = document.getElementById('fotoCliente').files[0];
-    if(!file) return alert("Selecione uma foto!");
+    if(!file) return;
 
-    document.getElementById('status').innerHTML = "🌵 <b>IA PROCESSANDO NO SERVIDOR...</b> 🌵";
+    document.getElementById('status').innerHTML = "🌵 <b>IA ANALISANDO...</b> 🌵";
     document.getElementById('resultados').innerHTML = "";
 
     const reader = new FileReader();
@@ -187,20 +131,20 @@ async function enviarParaServidor() {
                 })
             });
 
-            const dados = await res.json();
-            exibirResultados(dados);
+            const bicos = await res.json();
+            exibirResultados(bicos);
         } catch (err) {
-            document.getElementById('status').innerText = "Erro ao conectar com o servidor!";
+            document.getElementById('status').innerText = "Erro de conexão!";
         }
     };
 }
 
 function exibirResultados(lista) {
-    document.getElementById('status').innerHTML = lista.length > 0 ? "✅ <b>BUSCA CONCLUÍDA!</b>" : "❌ <b>NENHUM BICO ENCONTRADO</b>";
+    document.getElementById('status').innerHTML = lista.length > 0 ? "✅ <b>BUSCA CONCLUÍDA!</b>" : "❌ <b>NÃO ENCONTRADO</b>";
     document.getElementById('avisoMescla').style.display = "block";
     
     document.getElementById('resultados').innerHTML = lista.map(res => {
-        const linkZap = `https://wa.me/${WHATSAPP_NUMERO}?text=Olá, quero os dados do Bico ID:${res.numId}`;
+        const linkZap = `https://wa.me/${WHATSAPP_NUMERO}?text=Olá, quero o ID:${res.numId}`;
         return `
         <div class="card">
             <img src="${res.foto}" onclick="zoom('${res.foto}')">
