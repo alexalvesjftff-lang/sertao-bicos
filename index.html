@@ -2,176 +2,128 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Sertão Bicos - DNA Pro Cactus</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Sertão Bicos | Biometria Facial</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        :root {
-            --cor-fundo: #080808; 
-            --cor-principal: #ff8c00; 
-            --cor-detalhe: #00ff00; 
-            --cor-texto: #ffffff;
-            --cor-card: #111111;
-            --cor-whats: #25d366;
-        }
-
-        body { background: var(--cor-fundo); color: var(--cor-texto); font-family: 'Arial Black', sans-serif; margin: 0; text-align: center; }
-        header { background: #000; padding: 25px; font-size: 28px; font-weight: 900; text-transform: uppercase; border-bottom: 3px solid var(--cor-detalhe); box-shadow: 0 0 15px rgba(0, 255, 0, 0.5); }
-        
-        .msg-rapido { color: var(--cor-principal); font-weight: 800; font-size: 14px; margin-top: 10px; display: block; letter-spacing: 1px; text-transform: uppercase; }
-
-        .container { max-width: 500px; margin: auto; padding: 20px; }
-
-        .upload-box { 
-            background: var(--cor-card); border: 3px dashed var(--cor-principal); height: 220px; border-radius: 20px; 
-            display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; 
-            position: relative; background-size: contain; background-repeat: no-repeat; background-position: center; 
-            margin-bottom: 25px; transition: all 0.3s ease; overflow: hidden; box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
-        }
-        
-        .upload-box::before { content: "🌵"; display: var(--display-icone, block); font-size: 45px; filter: drop-shadow(0 0 10px var(--cor-detalhe)); margin-bottom: 10px; }
-        .upload-box input { position: absolute; inset: 0; opacity: 0; cursor: pointer; z-index: 2; }
-
-        .category-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 25px; }
-        .cat-btn { background: #1a1a1a; border: 2px solid var(--cor-principal); padding: 18px; border-radius: 12px; color: white; font-weight: bold; cursor: pointer; text-transform: uppercase; }
-        .cat-btn.active { background: var(--cor-principal); border-color: #fff; color: #000; }
-
-        button#btnBuscar { 
-            background: linear-gradient(45deg, #1e8449, #27ae60); color: white; border: none; padding: 20px; 
-            font-size: 20px; border-radius: 50px; cursor: pointer; font-weight: 900; width: 100%; display: none; margin-bottom: 20px;
-            text-transform: uppercase; box-shadow: 0 5px 15px rgba(0,255,0,0.3);
-        }
-
-        #status { margin-top: 10px; font-size: 18px; font-weight: bold; color: var(--cor-detalhe); text-transform: uppercase; }
-        #avisoMescla { display: none; background: #d35400; color: white; padding: 15px; border-radius: 10px; margin: 15px 0; font-weight: bold; font-size: 14px; border: 2px solid #fff; line-height: 1.4; text-transform: uppercase; }
-
-        #resultados { display: flex; flex-direction: column; gap: 15px; padding-bottom: 50px; }
-        .card { background: var(--cor-card); border-radius: 20px; padding: 15px; display: flex; align-items: center; gap: 15px; border: 2px solid #333; border-left: 6px solid var(--cor-detalhe); }
-        .card img { width: 110px; height: 110px; border-radius: 12px; border: 2px solid var(--cor-principal); object-fit: cover; }
-
-        .info-area { text-align: left; flex-grow: 1; }
-        .match-score { color: var(--cor-detalhe); font-size: 20px; font-weight: 900; }
-        .id-label { background: #222; color: #fff; padding: 5px 10px; border-radius: 5px; font-size: 24px; font-weight: 900; display: inline-block; margin: 5px 0; border: 1px solid #444; }
-        
-        /* BARRA DE SEMELHANÇA */
-        .barra-fundo { background: #222; height: 10px; border-radius: 5px; overflow: hidden; margin: 8px 0; border: 1px solid #333; }
-        .barra-cor { background: var(--cor-detalhe); height: 100%; box-shadow: 0 0 10px var(--cor-detalhe); }
-
-        .btn-whats { background: var(--cor-whats); color: white; padding: 12px; border-radius: 10px; text-decoration: none; font-weight: 900; font-size: 14px; display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 5px; border: none; text-transform: uppercase; }
-        
-        #modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 20000; align-items: center; justify-content: center; }
-        #modal img { max-width: 90%; max-height: 80%; border: 3px solid var(--cor-detalhe); }
+        @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&display=swap');
+        body { font-family: 'Oswald', sans-serif; background-color: #000; color: #fff; }
+        .btn-sertao { background: linear-gradient(45deg, #f39c12, #d35400); transition: 0.3s; }
+        .btn-sertao:active { transform: scale(0.95); }
+        .card-bico { border: 1px solid #333; background: #111; border-radius: 15px; overflow: hidden; }
+        #camera-preview { transform: scaleX(-1); border: 3px solid #f39c12; border-radius: 20px; }
+        .loading-pulse { animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0% { opacity: 0.5; } 50% { opacity: 1; } 100% { opacity: 0.5; } }
     </style>
 </head>
-<body>
+<body class="p-4">
 
-<header>🌵 SERTÃO BICOS 🌵</header>
-<span class="msg-rapido">BICOS RAPIDOS</span>
+    <header class="text-center py-6">
+        <h1 class="text-4xl font-bold text-orange-500 uppercase italic">🌵 Sertão Bicos</h1>
+        <p class="text-gray-400 text-sm">ENCONTRE SEU BICO PELA FACE</p>
+    </header>
 
-<div class="container">
-    <div class="upload-box" id="dropArea">
-        <span style="font-weight:900; font-size: 18px;" id="labelUpload">ENVIAR FOTO DO CLIENTE</span>
-        <input type="file" id="fotoCliente" accept="image/*">
-    </div>
-
-    <div class="category-grid">
-        <div class="cat-btn" id="btnCarro" onclick="selecionarCat('CARRO')">🚗 CARRO</div>
-        <div class="cat-btn" id="btnAmbos" onclick="selecionarCat('AMBOS')">🚗🏍️ AMBOS</div>
-    </div>
-
-    <button id="btnBuscar" onclick="buscarNoServidor()">🔍 BUSCANDO BICO...</button>
-    <div id="status"></div>
-    <div id="avisoMescla">⚠️ TESTE O BICO ANTES! VEJA SE DÁ MESCLA!</div>
-    <div id="resultados"></div>
-</div>
-
-<div id="modal" onclick="this.style.display='none'"><img id="imgModal" src=""></div>
-
-<script>
-// --- CONFIGURAÇÃO ---
-const URL_SERVIDOR = "https://undelegated-notarial-lessie.ngrok-free.dev"; // Seu Ngrok atual
-const WHATSAPP_NUMERO = "5511930927753";
-let categoriaSelecionada = '';
-
-function selecionarCat(cat) {
-    categoriaSelecionada = cat;
-    document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
-    document.getElementById(cat === 'CARRO' ? 'btnCarro' : 'btnAmbos').classList.add('active');
-    if(document.getElementById('fotoCliente').files[0]) {
-        mostrarBotao();
-    }
-}
-
-function mostrarBotao() {
-    const btn = document.getElementById('btnBuscar');
-    btn.style.display = 'block';
-    btn.innerText = "PROCURAR BICO 🔍";
-}
-
-document.getElementById('fotoCliente').onchange = (e) => {
-    const file = e.target.files[0];
-    if(file) {
-        const reader = new FileReader();
-        reader.onload = (event) => {
-            const dropArea = document.getElementById('dropArea');
-            dropArea.style.backgroundImage = `url(${event.target.result})`;
-            dropArea.style.setProperty('--display-icone', 'none'); 
-            document.getElementById('labelUpload').style.display = 'none';
-            dropArea.style.backgroundSize = 'contain';
-        };
-        reader.readAsDataURL(file);
-        if(categoriaSelecionada) mostrarBotao();
-    }
-};
-
-async function buscarNoServidor() {
-    const file = document.getElementById('fotoCliente').files[0];
-    const status = document.getElementById('status');
-    const resultados = document.getElementById('resultados');
-    const aviso = document.getElementById('avisoMescla');
-
-    status.innerHTML = "🔍 <b>BUSCANDO BICO...</b>";
-    resultados.innerHTML = "";
-    aviso.style.display = "none";
-
-    const formData = new FormData();
-    formData.append('foto_cliente', file);
-    formData.append('categoria', categoriaSelecionada);
-
-    try {
-        const res = await fetch(`${URL_SERVIDOR}/buscar_para_limpar`, {
-            method: 'POST',
-            headers: {'ngrok-skip-browser-warning': 'true'},
-            body: formData
-        });
-
-        const dados = await res.json();
+    <div class="max-w-md mx-auto relative mb-6">
+        <video id="video" width="100%" height="auto" autoplay playsinline class="bg-gray-900 shadow-2xl shadow-orange-900/20"></video>
+        <canvas id="canvas" class="hidden"></canvas>
         
-        if(dados.length > 0) {
-            status.innerHTML = "✅ <b>MATCH ENCONTRADO!</b>";
-            aviso.style.display = "block";
-            
-            resultados.innerHTML = dados.map(res => `
-                <div class="card">
-                    <img src="${URL_SERVIDOR}/banco_de_bicos/${res.path}?v=${Date.now()}" onclick="zoom(this.src)">
-                    <div class="info-area">
-                        <div class="match-score">${res.precisao}% MATCH</div>
-                        <div class="barra-fundo"><div class="barra-cor" style="width: ${res.precisao}%"></div></div>
-                        <div class="id-label">ID: ${res.numId}</div>
-                        <a href="https://wa.me/${WHATSAPP_NUMERO}?text=Olá, quero o bico do ID:${res.numId}" target="_blank" class="btn-whats">
-                            PEGAR DADOS 🌵
-                        </a>
-                    </div>
-                </div>
-            `).join('');
-        } else {
-            status.innerHTML = "❌ <b>NENHUM GÊMEO ENCONTRADO</b>";
-        }
-    } catch (err) {
-        status.innerText = "❌ ERRO: SERVIDOR OFFLINE NO PC";
-    }
-}
+        <div class="absolute inset-0 border-[2px] border-dashed border-orange-500/30 rounded-2xl m-8 pointer-events-none"></div>
+    </div>
 
-function zoom(src) { document.getElementById('imgModal').src = src; document.getElementById('modal').style.display = 'flex'; }
-</script>
+    <div class="max-w-md mx-auto space-y-4">
+        <button id="btn-buscar" class="btn-sertao w-full py-5 rounded-2xl text-2xl font-bold uppercase shadow-lg">
+            <i class="fas fa-camera mr-2"></i> BUSCAR BICO AGORA
+        </button>
+
+        <div id="status-msg" class="text-center text-orange-400 font-bold hidden">
+            <span class="loading-pulse">🔍 PROCESSANDO NA FILA... AGUARDE</span>
+        </div>
+    </div>
+
+    <div class="max-w-md mx-auto mt-10">
+        <h2 class="text-xl border-b-2 border-orange-600 mb-4 pb-2">🎯 RESULTADOS ENCONTRADOS</h2>
+        <div id="lista-resultados" class="grid grid-cols-1 gap-4">
+            <p class="text-gray-600 text-center py-10">Nenhum bico buscado ainda.</p>
+        </div>
+    </div>
+
+    <script>
+        // --- CONFIGURAÇÃO DO SERVIDOR (COLE SEU LINK DO NGROK AQUI) ---
+        const URL_SERVIDOR = "https://undelegated-notarial-lessie.ngrok-free.dev";
+
+        const video = document.getElementById('video');
+        const canvas = document.getElementById('canvas');
+        const btnBuscar = document.getElementById('btn-buscar');
+        const statusMsg = document.getElementById('status-msg');
+        const listaResultados = document.getElementById('lista-resultados');
+
+        // Iniciar Câmera do Celular
+        navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" }, audio: false })
+            .then(stream => { video.srcObject = stream; })
+            .catch(err => { alert("Erro ao abrir câmera: " + err); });
+
+        btnBuscar.addEventListener('click', async () => {
+            // 1. Interface de Carregamento
+            btnBuscar.disabled = true;
+            btnBuscar.classList.add('opacity-50');
+            statusMsg.classList.remove('hidden');
+            listaResultados.innerHTML = "";
+
+            // 2. Captura a Foto
+            const context = canvas.getContext('2d');
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+            
+            canvas.toBlob(async (blob) => {
+                const formData = new FormData();
+                formData.append('foto_cliente', blob, 'face.jpg');
+                formData.append('categoria', 'GERAL');
+
+                try {
+                    // 3. Envia para o Python (Fila de Espera)
+                    const response = await fetch(`${URL_SERVIDOR}/buscar_para_limpar`, {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    const bicos = await response.json();
+
+                    // 4. Exibe os Resultados
+                    statusMsg.classList.add('hidden');
+                    btnBuscar.disabled = false;
+                    btnBuscar.classList.remove('opacity-50');
+
+                    if (bicos.length === 0) {
+                        listaResultados.innerHTML = "<p class='text-center text-red-500'>Nenhum bico compatível encontrado.</p>";
+                        return;
+                    }
+
+                    bicos.forEach(bico => {
+                        const htmlCard = `
+                            <div class="card-bico flex items-center p-3 animate__animated animate__fadeInUp">
+                                <img src="${URL_SERVIDOR}/banco_de_bicos/${bico.path}" class="w-20 h-20 object-cover rounded-lg border border-orange-500">
+                                <div class="ml-4">
+                                    <h3 class="text-orange-500 text-lg font-bold">ID: ${bico.numId}</h3>
+                                    <p class="text-sm text-gray-400">Precisão: ${bico.precisao}%</p>
+                                    <div class="mt-1 w-24 h-1 bg-gray-800 rounded-full">
+                                        <div class="h-full bg-green-500 rounded-full" style="width: ${bico.precisao}%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                        listaResultados.innerHTML += htmlCard;
+                    });
+
+                } catch (error) {
+                    alert("Erro de Conexão: Verifique se o Ngrok está online!");
+                    btnBuscar.disabled = false;
+                    statusMsg.classList.add('hidden');
+                }
+            }, 'image/jpeg', 0.8);
+        });
+    </script>
+
 </body>
 </html>
