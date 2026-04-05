@@ -6,18 +6,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
         :root { --fundo: #080808; --laranja: #ff8c00; --verde: #00ff00; --card: #111; }
-        body { background: var(--fundo); color: white; font-family: sans-serif; margin: 0; text-align: center; }
-        header { padding: 25px; font-size: 26px; font-weight: 900; border-bottom: 3px solid var(--verde); box-shadow: 0 0 15px rgba(0,255,0,0.4); }
+        body { background: var(--fundo); color: white; font-family: 'Segoe UI', sans-serif; margin: 0; text-align: center; }
+        header { padding: 25px; font-size: 26px; font-weight: 900; border-bottom: 3px solid var(--verde); box-shadow: 0 0 15px rgba(0,255,0,0.4); text-transform: uppercase; }
         .container { max-width: 450px; margin: auto; padding: 20px; }
-        .upload-box { border: 3px dashed var(--laranja); height: 200px; border-radius: 15px; display: flex; align-items: center; justify-content: center; position: relative; margin-bottom: 20px; background-size: contain; background-repeat: no-repeat; background-position: center; }
-        .upload-box input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
-        .btn-cat { background: #222; border: 2px solid var(--laranja); padding: 15px; color: white; font-weight: bold; border-radius: 10px; cursor: pointer; }
-        .btn-cat.active { background: var(--laranja); color: black; }
-        #btnBuscar { background: #27ae60; color: white; border: none; padding: 18px; width: 100%; border-radius: 50px; font-weight: 900; display: none; cursor: pointer; }
-        .card { background: var(--card); margin-top: 10px; padding: 15px; border-radius: 10px; display: flex; align-items: center; gap: 15px; border: 1px solid #333; }
-        .card img { width: 80px; height: 80px; border-radius: 5px; border: 1px solid var(--laranja); }
-        .btn-whats { background: #25d366; color: white; padding: 8px; text-decoration: none; border-radius: 5px; font-size: 13px; display: block; margin-top: 5px; font-weight: bold; }
+        .upload-box { border: 3px dashed var(--laranja); height: 200px; border-radius: 15px; display: flex; align-items: center; justify-content: center; position: relative; margin-bottom: 20px; background-size: contain; background-repeat: no-repeat; background-position: center; transition: 0.3s; }
+        .upload-box input { position: absolute; inset: 0; opacity: 0; cursor: pointer; z-index: 5; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
+        .btn-cat { background: #1a1a1a; border: 2px solid var(--laranja); padding: 15px; color: white; font-weight: bold; border-radius: 12px; cursor: pointer; }
+        .btn-cat.active { background: var(--laranja); color: black; border-color: white; }
+        #btnBuscar { background: linear-gradient(45deg, #1e8449, #27ae60); color: white; border: none; padding: 18px; width: 100%; border-radius: 50px; font-weight: 900; font-size: 18px; display: none; cursor: pointer; box-shadow: 0 4px 15px rgba(0,255,0,0.3); }
+        #resultados { margin-top: 20px; display: flex; flex-direction: column; gap: 12px; padding-bottom: 50px; }
+        .card { background: var(--card); padding: 15px; border-radius: 12px; display: flex; align-items: center; gap: 15px; border: 1px solid #333; }
+        .card img { width: 90px; height: 90px; border-radius: 8px; border: 2px solid var(--laranja); object-fit: cover; }
+        .btn-whats { background: #25d366; color: white; padding: 10px; text-decoration: none; border-radius: 6px; font-size: 14px; display: block; margin-top: 8px; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -35,12 +36,12 @@
     </div>
 
     <button id="btnBuscar" onclick="buscar()">PROCURAR BICO AGORA</button>
-    <div id="status" style="margin: 15px; font-weight: bold; color: var(--verde);"></div>
+    <div id="status" style="margin-top: 15px; font-weight: bold; color: var(--verde);"></div>
     <div id="resultados"></div>
 </div>
 
 <script>
-// SINCRONIA: O LINK DO SEU NGROK
+// SINCRONIA: LINK DO SEU NGROK ATUALIZADO
 const URL_SERVIDOR = "https://undelegated-notarial-lessie.ngrok-free.dev";
 let categoria = '';
 
@@ -62,35 +63,42 @@ document.getElementById('arquivo').onchange = (e) => {
 };
 
 async function buscar() {
-    const file = document.getElementById('arquivo').files[0];
-    document.getElementById('status').innerText = "⏳ IA BUSCANDO NO SERVIDOR...";
+    const fileInput = document.getElementById('arquivo');
+    if(!fileInput.files[0] || !categoria) return;
+
+    document.getElementById('status').innerText = "⏳ IA ANALISANDO NO SEU PC...";
+    document.getElementById('resultados').innerHTML = "";
     
     const reader = new FileReader();
-    reader.readAsDataURL(file);
+    reader.readAsDataURL(fileInput.files[0]);
     reader.onload = async () => {
         try {
+            // ROTA SINCRONIZADA: /buscar
             const res = await fetch(`${URL_SERVIDOR}/buscar`, {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({ image: reader.result, categoria: categoria })
             });
+
+            if(!res.ok) throw new Error("Servidor Offline");
+            
             const bicos = await res.json();
             exibir(bicos);
         } catch (e) {
-            document.getElementById('status').innerText = "❌ ERRO DE CONEXÃO!";
+            document.getElementById('status').innerText = "❌ ERRO: PC DESCONECTADO!";
         }
     };
 }
 
 function exibir(lista) {
-    document.getElementById('status').innerText = lista.length > 0 ? "✅ SUCESSO!" : "❌ NADA ENCONTRADO";
+    document.getElementById('status').innerText = lista.length > 0 ? "✅ ENCONTRADO!" : "❌ NADA NA PASTA " + categoria;
     document.getElementById('resultados').innerHTML = lista.map(b => `
         <div class="card">
             <img src="${b.foto}">
-            <div style="text-align:left">
+            <div style="text-align:left; flex: 1;">
                 <b style="color:var(--verde)">${b.score}% Match</b><br>
                 <small>ID: ${b.numId}</small>
-                <a href="https://wa.me/5511930927753?text=Quero o bico ID:${b.numId}" class="btn-whats">PEGAR DADOS 🌵</a>
+                <a href="https://wa.me/5511930927753?text=Quero os dados do Bico ID:${b.numId}" class="btn-whats" target="_blank">PEGAR DADOS 🌵</a>
             </div>
         </div>
     `).join('');
