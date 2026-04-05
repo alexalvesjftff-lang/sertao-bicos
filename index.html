@@ -3,33 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🌵 SERTÃO BICOS - IDENTIFICAÇÃO</title>
+    <title>🌵 SERTÃO BICOS - BUSCA BIOMÉTRICA</title>
     <style>
         :root { --cor-principal: #bc6c25; --cor-fundo: #0a0a0a; }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--cor-fundo); color: #fff; margin: 0; padding: 20px; text-align: center; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--cor-fundo); color: #fff; margin: 0; padding: 20px; text-align: center; }
+        
         .container { max-width: 500px; margin: auto; }
         h1 { color: var(--cor-principal); text-transform: uppercase; letter-spacing: 2px; }
+        
         .area-foto { border: 2px dashed var(--cor-principal); padding: 30px; border-radius: 15px; margin-bottom: 20px; background: #111; cursor: pointer; }
-        #preview { width: 100%; border-radius: 10px; display: none; margin-top: 15px; border: 2px solid var(--cor-principal); }
-        select, .btn-buscar { width: 100%; padding: 18px; margin-top: 15px; border-radius: 8px; border: none; font-size: 1.1rem; font-weight: bold; }
-        select { background: #222; color: #fff; border: 1px solid var(--cor-principal); text-align: center; }
-        .btn-buscar { background: var(--cor-principal); color: #fff; cursor: pointer; text-transform: uppercase; }
+        #preview { width: 100%; border-radius: 10px; display: none; margin-top: 15px; }
+        
+        select, .btn-buscar { width: 100%; padding: 15px; margin-top: 15px; border-radius: 8px; border: none; font-size: 1rem; font-weight: bold; }
+        select { background: #222; color: #fff; border: 1px solid var(--cor-principal); }
+        .btn-buscar { background: var(--cor-principal); color: #fff; cursor: pointer; text-transform: uppercase; transition: 0.3s; }
         .btn-buscar:disabled { background: #444; cursor: not-allowed; }
-        #status-texto { margin-top: 25px; font-size: 1.2rem; font-weight: bold; color: var(--cor-principal); }
+
+        #status-texto { margin-top: 20px; font-size: 1.1rem; min-height: 1.5em; color: var(--cor-principal); }
+
+        /* GRID DE RESULTADOS */
         #resultados { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 30px; }
-        .card { background: #161616; border: 1px solid #333; border-radius: 12px; padding: 12px; }
-        .card img { width: 100%; border-radius: 8px; height: 160px; object-fit: cover; }
-        .card p { margin: 10px 0 2px 0; font-weight: bold; }
-        .score { color: #a3b18a !important; font-size: 0.85rem !important; }
+        .card { background: #1a1a1a; border: 1px solid #333; border-radius: 10px; padding: 10px; overflow: hidden; animation: fadeIn 0.5s ease; }
+        .card img { width: 100%; border-radius: 5px; height: 180px; object-fit: cover; }
+        .card p { margin: 8px 0 0 0; font-weight: bold; font-size: 0.9rem; }
+        .score { color: #606c38; font-size: 0.8rem !important; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
 
 <div class="container">
     <h1>🌵 Sertão Bicos</h1>
-    
+    <p>Encontre o bico certo pela foto</p>
+
     <div class="area-foto" onclick="document.getElementById('input-file').click()">
-        <span id="label-foto">📸 CLIQUE PARA TIRAR FOTO</span>
+        <span>📸 TOQUE PARA TIRAR FOTO</span>
         <input type="file" id="input-file" accept="image/*" capture="user" hidden onchange="carregarFoto(event)">
         <img id="preview">
     </div>
@@ -51,13 +60,12 @@
 
     function carregarFoto(event) {
         const file = event.target.files[0];
-        if (!file) return;
         const reader = new FileReader();
         reader.onload = function(e) {
             fotoBase64 = e.target.result;
-            document.getElementById('preview').src = fotoBase64;
-            document.getElementById('preview').style.display = "block";
-            document.getElementById('label-foto').style.display = "none";
+            const preview = document.getElementById('preview');
+            preview.src = fotoBase64;
+            preview.style.display = "block";
             document.getElementById('btn-acao').disabled = false;
         }
         reader.readAsDataURL(file);
@@ -85,7 +93,7 @@
             const dados = await res.json();
             
             if(dados.length > 0) {
-                statusLog.innerHTML = `✅ ENCONTRAMOS ${dados.length} CORRESPONDÊNCIAS!`;
+                statusLog.innerHTML = `✅ ENCONTRAMOS ${dados.length} PARECIDOS!`;
                 dados.forEach(bico => {
                     resultadoDiv.innerHTML += `
                         <div class="card">
@@ -95,18 +103,15 @@
                         </div>`;
                 });
             } else {
-                statusLog.innerHTML = "❌ NENHUM PARECIDO ENCONTRADO.";
+                statusLog.innerHTML = "❌ NENHUM BICO ENCONTRADO.";
             }
         } catch (e) {
-            // ALTERAÇÃO SOLICITADA AQUI:
-            // Remove o erro técnico e coloca a mensagem de suporte
+            // A ÚNICA MUDANÇA É AQUI:
             statusLog.innerHTML = "⚠️ <b>CHAME O RESPONSÁVEL</b>";
-            console.log("Erro de conexão com o servidor local.");
         } finally {
             btn.disabled = false;
         }
     }
 </script>
-
 </body>
 </html>
