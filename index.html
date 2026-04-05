@@ -26,8 +26,6 @@ header {
     font-size: 26px;
     font-weight: 900;
     border-bottom: 3px solid var(--verde);
-    box-shadow: 0 0 15px rgba(0,255,0,0.4);
-    text-transform: uppercase;
 }
 
 .container {
@@ -36,7 +34,6 @@ header {
     padding: 20px;
 }
 
-/* upload */
 .upload-box {
     border: 3px dashed var(--laranja);
     height: 200px;
@@ -58,7 +55,6 @@ header {
     cursor: pointer;
 }
 
-/* categorias */
 .grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -79,10 +75,8 @@ header {
 .btn-cat.active {
     background: var(--laranja);
     color: black;
-    border-color: white;
 }
 
-/* botão */
 #btnBuscar {
     background: linear-gradient(45deg, #1e8449, #27ae60);
     color: white;
@@ -96,23 +90,19 @@ header {
     cursor: pointer;
 }
 
-/* loading */
 .loading {
     animation: piscar 1s infinite;
 }
+
 @keyframes piscar {
-    0% { opacity: 1; }
     50% { opacity: 0.4; }
-    100% { opacity: 1; }
 }
 
-/* resultados */
 #resultados {
     margin-top: 20px;
     display: flex;
     flex-direction: column;
     gap: 12px;
-    padding-bottom: 50px;
 }
 
 .card {
@@ -122,7 +112,6 @@ header {
     display: flex;
     align-items: center;
     gap: 15px;
-    border: 1px solid #333;
 }
 
 .card img {
@@ -142,7 +131,6 @@ header {
     font-size: 14px;
     display: block;
     margin-top: 8px;
-    font-weight: bold;
 }
 </style>
 </head>
@@ -159,123 +147,127 @@ header {
 </div>
 
 <div class="grid">
-    <div class="btn-cat" id="c_carro" onclick="setCat('CARRO')">🚗 CARRO</div>
-    <div class="btn-cat" id="c_ambos" onclick="setCat('AMBOS')">🚗🏍️ AMBOS</div>
+    <div class="btn-cat" id="c_carro">🚗 CARRO</div>
+    <div class="btn-cat" id="c_ambos">🚗🏍️ AMBOS</div>
 </div>
 
-<button id="btnBuscar" onclick="buscar()">PROCURAR BICO AGORA</button>
+<button id="btnBuscar">PROCURAR BICO AGORA</button>
 
-<div id="status" style="margin-top: 15px; font-weight: bold; color: var(--verde);"></div>
-
+<div id="status"></div>
 <div id="resultados"></div>
 
 </div>
 
 <script>
-// 🔗 COLOQUE SEU LINK AQUI
-const URL_SERVIDOR = "SEU_LINK_AQUI";
+window.onload = () => {
 
-let categoria = '';
+    const URL_SERVIDOR = "SEU_LINK_AQUI";
 
-// selecionar categoria
-function setCat(c) {
-    categoria = c;
+    const status = document.getElementById('status');
+    const resultados = document.getElementById('resultados');
+    const arquivo = document.getElementById('arquivo');
+    const box = document.getElementById('box');
+    const txt = document.getElementById('txt');
+    const btnBuscar = document.getElementById('btnBuscar');
+    const c_carro = document.getElementById('c_carro');
+    const c_ambos = document.getElementById('c_ambos');
 
-    document.querySelectorAll('.btn-cat')
-        .forEach(b => b.classList.remove('active'));
+    let categoria = '';
 
-    document.getElementById(
-        c === 'CARRO' ? 'c_carro' : 'c_ambos'
-    ).classList.add('active');
+    // selecionar categoria
+    function setCat(c) {
+        categoria = c;
 
-    if (arquivo.files[0]) btnBuscar.style.display = 'block';
-}
+        c_carro.classList.remove('active');
+        c_ambos.classList.remove('active');
 
-// preview imagem
-arquivo.onchange = (e) => {
-    const reader = new FileReader();
+        if (c === 'CARRO') c_carro.classList.add('active');
+        else c_ambos.classList.add('active');
 
-    reader.onload = (ev) => {
-        box.style.backgroundImage = `url(${ev.target.result})`;
-        txt.style.display = 'none';
-
-        if (categoria) btnBuscar.style.display = 'block';
-    };
-
-    reader.readAsDataURL(e.target.files[0]);
-};
-
-// buscar
-async function buscar() {
-
-    if (!arquivo.files[0] || !categoria) {
-        status.innerText = "⚠️ Selecione foto e categoria";
-        return;
+        if (arquivo.files[0]) btnBuscar.style.display = 'block';
     }
 
-    status.innerText = "⏳ ANALISANDO...";
-    status.classList.add("loading");
-    resultados.innerHTML = "";
+    c_carro.onclick = () => setCat('CARRO');
+    c_ambos.onclick = () => setCat('AMBOS');
 
-    const reader = new FileReader();
+    // preview imagem
+    arquivo.onchange = () => {
+        const reader = new FileReader();
 
-    reader.onload = async () => {
-        try {
+        reader.onload = (e) => {
+            box.style.backgroundImage = `url(${e.target.result})`;
+            txt.style.display = 'none';
 
-            const res = await fetch(`${URL_SERVIDOR}/buscar`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    image: reader.result,
-                    categoria: categoria
-                })
-            });
+            if (categoria) btnBuscar.style.display = 'block';
+        };
 
-            if (!res.ok) throw new Error();
+        reader.readAsDataURL(arquivo.files[0]);
+    };
 
-            const dados = await res.json();
-            exibir(dados);
+    // buscar
+    btnBuscar.onclick = async () => {
 
-        } catch {
-            status.innerText = "❌ ERRO DE CONEXÃO";
+        if (!arquivo.files[0] || !categoria) {
+            status.innerText = "⚠️ Selecione foto e categoria";
+            return;
         }
+
+        status.innerText = "⏳ ANALISANDO...";
+        status.classList.add("loading");
+        resultados.innerHTML = "";
+
+        const reader = new FileReader();
+
+        reader.onload = async () => {
+            try {
+
+                const res = await fetch(`${URL_SERVIDOR}/buscar`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        image: reader.result,
+                        categoria: categoria
+                    })
+                });
+
+                const lista = await res.json();
+
+                status.classList.remove("loading");
+
+                if (!lista.length) {
+                    status.innerText = "❌ NENHUM ENCONTRADO";
+                    return;
+                }
+
+                status.innerText = "🔥 RESULTADOS";
+
+                resultados.innerHTML = lista.map(b => `
+                    <div class="card">
+                        <img src="${b.foto}">
+                        <div style="text-align:left; flex:1;">
+                            <b style="color:#00ff00">
+                                ${b.score}% ${b.score > 90 ? '🔥' : b.score > 80 ? '✅' : '⚠️'}
+                            </b><br>
+                            <small>ID: ${b.numId}</small>
+
+                            <a href="https://wa.me/551192564332?text=Quero os dados do Bico ID:${b.numId}"
+                               class="btn-whats" target="_blank">
+                               PEGAR DADOS 🌵
+                            </a>
+                        </div>
+                    </div>
+                `).join('');
+
+            } catch (e) {
+                status.classList.remove("loading");
+                status.innerText = "❌ ERRO DE CONEXÃO";
+            }
+        };
+
+        reader.readAsDataURL(arquivo.files[0]);
     };
 
-    reader.readAsDataURL(arquivo.files[0]);
-}
-
-// exibir resultados
-function exibir(lista) {
-
-    status.classList.remove("loading");
-
-    if (lista.length === 0) {
-        status.innerText = "❌ NENHUM ROSTO COMPATÍVEL";
-        return;
-    }
-
-    status.innerText = "🔥 RESULTADOS ENCONTRADOS";
-
-    resultados.innerHTML = lista.map(b => `
-        <div class="card">
-            <img src="${b.foto}">
-            <div style="text-align:left; flex:1;">
-                <b style="color:var(--verde)">
-                    ${b.score}% MATCH
-                </b><br>
-                <small>ID: ${b.numId}</small>
-
-                <a href="https://wa.me/551192564332?text=Quero os dados do Bico ID:${b.numId}"
-                   class="btn-whats"
-                   target="_blank">
-                   PEGAR DADOS 🌵
-                </a>
-            </div>
-        </div>
-    `).join('');
-}
+};
 </script>
 
 </body>
