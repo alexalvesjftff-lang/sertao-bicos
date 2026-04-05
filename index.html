@@ -5,161 +5,95 @@
     <title>Sertão Bicos - DNA Pro Cactus</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
-        :root {
-            --cor-fundo: #080808; 
-            --cor-principal: #ff8c00; 
-            --cor-detalhe: #00ff00; 
-            --cor-texto: #ffffff;
-            --cor-card: #111111;
-            --cor-whats: #25d366;
-        }
-
-        body { background: var(--cor-fundo); color: var(--cor-texto); font-family: 'Segoe UI', sans-serif; margin: 0; text-align: center; }
-        header { background: #000; padding: 25px; font-size: 28px; font-weight: 900; text-transform: uppercase; border-bottom: 3px solid var(--cor-detalhe); box-shadow: 0 0 15px rgba(0, 255, 0, 0.5); }
-        .msg-rapido { color: var(--cor-principal); font-weight: 800; font-size: 14px; margin-top: 10px; display: block; letter-spacing: 1px; }
-        .container { max-width: 500px; margin: auto; padding: 20px; }
-        .admin-trigger { position: fixed; top: 0; left: 0; width: 60px; height: 60px; z-index: 10000; cursor: pointer; }
-
-        .upload-box { 
-            background: var(--cor-card); border: 3px dashed var(--cor-principal); height: 220px; border-radius: 20px; 
-            display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; 
-            position: relative; background-size: contain; background-repeat: no-repeat; background-position: center; 
-            margin-bottom: 25px; transition: all 0.3s ease; overflow: hidden; box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
-        }
-        
-        .upload-box::before { content: "🌵"; display: var(--display-icone, block); font-size: 45px; filter: drop-shadow(0 0 10px var(--cor-detalhe)); margin-bottom: 10px; }
-        .upload-box input { position: absolute; inset: 0; opacity: 0; cursor: pointer; z-index: 2; }
-
-        .category-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 25px; }
-        .cat-btn { background: #1a1a1a; border: 2px solid var(--cor-principal); padding: 18px; border-radius: 12px; color: white; font-weight: bold; cursor: pointer; }
-        .cat-btn.active { background: var(--cor-principal); border-color: #fff; }
-
-        button#btnBuscar { 
-            background: linear-gradient(45deg, #1e8449, #27ae60); color: white; border: none; padding: 18px; 
-            font-size: 19px; border-radius: 50px; cursor: pointer; font-weight: 900; width: 100%; display: none; margin-bottom: 20px;
-        }
-
-        #status { margin-top: 10px; font-weight: bold; color: var(--cor-detalhe); }
-        #resultados { display: flex; flex-direction: column; gap: 12px; padding-bottom: 90px; }
-        .card { background: var(--cor-card); border-radius: 15px; padding: 15px; display: flex; align-items: center; gap: 15px; border: 1px solid #333; }
-        .card img { width: 100px; height: 100px; border-radius: 10px; border: 2px solid var(--cor-principal); object-fit: cover; }
-
-        .btn-whats { background: var(--cor-whats); color: white; padding: 10px 15px; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 14px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; margin-top: 8px; width: 100%; }
-
-        #adminPanel { display: none; background: #fdf2e2; border: 2px solid #333; padding: 25px; position: fixed; inset: 10px; z-index: 10001; border-radius: 15px; text-align: left; overflow-y: auto; color: #333; }
-        .admin-input { width: 100%; padding: 12px; margin: 10px 0; border-radius: 8px; border: 1px solid #ccc; box-sizing: border-box; }
-        .btn-acao { color:white; width:100%; padding:15px; border:none; border-radius:8px; font-weight:bold; cursor:pointer; margin-top:10px; }
+        :root { --fundo: #080808; --laranja: #ff8c00; --verde: #00ff00; --card: #111; }
+        body { background: var(--fundo); color: white; font-family: sans-serif; margin: 0; text-align: center; }
+        header { padding: 25px; font-size: 26px; font-weight: 900; border-bottom: 3px solid var(--verde); box-shadow: 0 0 15px rgba(0,255,0,0.4); }
+        .container { max-width: 450px; margin: auto; padding: 20px; }
+        .upload-box { border: 3px dashed var(--laranja); height: 200px; border-radius: 15px; display: flex; align-items: center; justify-content: center; position: relative; margin-bottom: 20px; background-size: contain; background-repeat: no-repeat; background-position: center; }
+        .upload-box input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+        .btn-cat { background: #222; border: 2px solid var(--laranja); padding: 15px; color: white; font-weight: bold; border-radius: 10px; cursor: pointer; }
+        .btn-cat.active { background: var(--laranja); color: black; }
+        #btnBuscar { background: #27ae60; color: white; border: none; padding: 18px; width: 100%; border-radius: 50px; font-weight: 900; display: none; cursor: pointer; }
+        .card { background: var(--card); margin-top: 10px; padding: 15px; border-radius: 10px; display: flex; align-items: center; gap: 15px; border: 1px solid #333; }
+        .card img { width: 80px; height: 80px; border-radius: 5px; border: 1px solid var(--laranja); }
+        .btn-whats { background: #25d366; color: white; padding: 8px; text-decoration: none; border-radius: 5px; font-size: 13px; display: block; margin-top: 5px; font-weight: bold; }
     </style>
 </head>
 <body>
 
-<div class="admin-trigger" onclick="abrirAdmin()"></div>
 <header>🌵 SERTÃO BICOS 🌵</header>
-<span class="msg-rapido">🌵 ENCONTRE SEU BICO NO PC 🌵</span>
-
 <div class="container">
-    <div class="upload-box" id="dropArea">
-        <span style="font-weight:bold; letter-spacing: 1px;" id="labelUpload">TOQUE PARA ENVIAR A FOTO</span>
-        <input type="file" id="fotoCliente" accept="image/*">
+    <div class="upload-box" id="box">
+        <span id="txt">TOQUE PARA ENVIAR FOTO</span>
+        <input type="file" id="arquivo" accept="image/*">
     </div>
 
-    <div class="category-grid">
-        <div class="cat-btn" id="btnCarro" onclick="selecionarCat('CARRO')">🚗 CARRO</div>
-        <div class="cat-btn" id="btnAmbos" onclick="selecionarCat('AMBOS')">🚗🏍️ AMBOS</div>
+    <div class="grid">
+        <div class="btn-cat" id="c_carro" onclick="setCat('CARRO')">🚗 CARRO</div>
+        <div class="btn-cat" id="c_ambos" onclick="setCat('AMBOS')">🚗🏍️ AMBOS</div>
     </div>
 
-    <button id="btnBuscar" onclick="enviarParaServidor()">PROCURAR BICO</button>
-    <div id="status"></div>
+    <button id="btnBuscar" onclick="buscar()">PROCURAR BICO AGORA</button>
+    <div id="status" style="margin: 15px; font-weight: bold; color: var(--verde);"></div>
     <div id="resultados"></div>
 </div>
 
-<div id="adminPanel">
-    <h3>🌵 Gestão Sertão Bicos</h3>
-    <select id="adminCat" class="admin-input"><option value="CARRO">CARRO</option><option value="AMBOS">AMBOS</option></select>
-    <input type="file" id="fotosPasta" class="admin-input" multiple>
-    <button id="btnCadastrarLote" onclick="cadastrarNoServidor()" class="btn-acao" style="background:#27ae60;">CADASTRAR NO PC</button>
-    <button onclick="document.getElementById('adminPanel').style.display='none'" class="btn-acao" style="background:#777;">SAIR</button>
-</div>
-
 <script>
-// --- CONFIGURAÇÃO ---
-const URL_SERVIDOR = "https://undelegated-notarial-lessie.ngrok-free.dev"; 
-const WHATSAPP_NUMERO = "5511925243032";
-let categoriaSelecionada = '';
+// SINCRONIA: O LINK DO SEU NGROK
+const URL_SERVIDOR = "https://undelegated-notarial-lessie.ngrok-free.dev";
+let categoria = '';
 
-function selecionarCat(cat) {
-    categoriaSelecionada = cat;
-    document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
-    document.getElementById(cat === 'CARRO' ? 'btnCarro' : 'btnAmbos').classList.add('active');
-    if(document.getElementById('fotoCliente').files[0]) document.getElementById('btnBuscar').style.display = 'block';
+function setCat(c) {
+    categoria = c;
+    document.querySelectorAll('.btn-cat').forEach(b => b.classList.remove('active'));
+    document.getElementById(c == 'CARRO' ? 'c_carro' : 'c_ambos').classList.add('active');
+    if(document.getElementById('arquivo').files[0]) document.getElementById('btnBuscar').style.display = 'block';
 }
 
-document.getElementById('fotoCliente').onchange = (e) => {
-    const file = e.target.files[0];
-    if(file) {
-        const reader = new FileReader();
-        reader.onload = (event) => {
-            const dropArea = document.getElementById('dropArea');
-            dropArea.style.backgroundImage = `url(${event.target.result})`;
-            dropArea.style.setProperty('--display-icone', 'none'); 
-            document.getElementById('labelUpload').style.display = 'none';
-        };
-        reader.readAsDataURL(file);
-        if(categoriaSelecionada) document.getElementById('btnBuscar').style.display = 'block';
-    }
+document.getElementById('arquivo').onchange = (e) => {
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+        document.getElementById('box').style.backgroundImage = `url(${ev.target.result})`;
+        document.getElementById('txt').style.display = 'none';
+        if(categoria) document.getElementById('btnBuscar').style.display = 'block';
+    };
+    reader.readAsDataURL(e.target.files[0]);
 };
 
-async function enviarParaServidor() {
-    const file = document.getElementById('fotoCliente').files[0];
-    if(!file) return alert("Selecione uma foto!");
-
-    document.getElementById('status').innerHTML = "🌵 <b>IA PROCESSANDO...</b> 🌵";
+async function buscar() {
+    const file = document.getElementById('arquivo').files[0];
+    document.getElementById('status').innerText = "⏳ IA BUSCANDO NO SERVIDOR...";
     
-    // Na busca do cliente, usamos o nome do arquivo para achar o ID
-    const res = await fetch(`${URL_SERVIDOR}/buscar_para_limpar`, {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({ cpfs: [file.name] }) 
-    });
-    const dados = await res.json();
-    exibirResultados(dados);
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = async () => {
+        try {
+            const res = await fetch(`${URL_SERVIDOR}/buscar`, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ image: reader.result, categoria: categoria })
+            });
+            const bicos = await res.json();
+            exibir(bicos);
+        } catch (e) {
+            document.getElementById('status').innerText = "❌ ERRO DE CONEXÃO!";
+        }
+    };
 }
 
-function exibirResultados(lista) {
-    const div = document.getElementById('resultados');
-    document.getElementById('status').innerHTML = lista.length > 0 ? "✅ <b>ENCONTRADO!</b>" : "❌ <b>NÃO LOCALIZADO</b>";
-    
-    div.innerHTML = lista.map(res => {
-        const imgUrl = `${URL_SERVIDOR}/banco_de_bicos/${res.path}`;
-        return `
+function exibir(lista) {
+    document.getElementById('status').innerText = lista.length > 0 ? "✅ SUCESSO!" : "❌ NADA ENCONTRADO";
+    document.getElementById('resultados').innerHTML = lista.map(b => `
         <div class="card">
-            <img src="${imgUrl}">
-            <div style="text-align:left; flex-grow:1">
-                <b style="color:var(--cor-detalhe);">ID: ${res.numId}</b><br>
-                <a href="https://wa.me/${WHATSAPP_NUMERO}?text=Olá, quero o bico ID:${res.numId}" target="_blank" class="btn-whats">PEGAR DADOS 🌵</a>
+            <img src="${b.foto}">
+            <div style="text-align:left">
+                <b style="color:var(--verde)">${b.score}% Match</b><br>
+                <small>ID: ${b.numId}</small>
+                <a href="https://wa.me/5511930927753?text=Quero o bico ID:${b.numId}" class="btn-whats">PEGAR DADOS 🌵</a>
             </div>
-        </div>`;
-    }).join('');
-}
-
-function abrirAdmin() { if(prompt("Senha:") === "9122") document.getElementById('adminPanel').style.display = 'block'; }
-
-async function cadastrarNoServidor() {
-    const files = Array.from(document.getElementById('fotosPasta').files);
-    const cat = document.getElementById('adminCat').value;
-    const btn = document.getElementById('btnCadastrarLote');
-    
-    btn.disabled = true;
-    for (let file of files) {
-        const fd = new FormData();
-        fd.append('foto', file);
-        fd.append('nome_real', file.name);
-        fd.append('categoria', cat);
-        await fetch(`${URL_SERVIDOR}/cadastrar_auto`, { method: 'POST', body: fd });
-        await new Promise(r => setTimeout(r, 800));
-    }
-    alert("Cadastrado com sucesso!");
-    btn.disabled = false;
+        </div>
+    `).join('');
 }
 </script>
 </body>
