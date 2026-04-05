@@ -1,108 +1,282 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <title>Sertão Bicos - DNA Pro Cactus</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <style>
-        :root { --fundo: #080808; --laranja: #ff8c00; --verde: #00ff00; --card: #111; }
-        body { background: var(--fundo); color: white; font-family: 'Segoe UI', sans-serif; margin: 0; text-align: center; }
-        header { padding: 25px; font-size: 26px; font-weight: 900; border-bottom: 3px solid var(--verde); box-shadow: 0 0 15px rgba(0,255,0,0.4); text-transform: uppercase; }
-        .container { max-width: 450px; margin: auto; padding: 20px; }
-        .upload-box { border: 3px dashed var(--laranja); height: 200px; border-radius: 15px; display: flex; align-items: center; justify-content: center; position: relative; margin-bottom: 20px; background-size: contain; background-repeat: no-repeat; background-position: center; transition: 0.3s; }
-        .upload-box input { position: absolute; inset: 0; opacity: 0; cursor: pointer; z-index: 5; }
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
-        .btn-cat { background: #1a1a1a; border: 2px solid var(--laranja); padding: 15px; color: white; font-weight: bold; border-radius: 12px; cursor: pointer; }
-        .btn-cat.active { background: var(--laranja); color: black; border-color: white; }
-        #btnBuscar { background: linear-gradient(45deg, #1e8449, #27ae60); color: white; border: none; padding: 18px; width: 100%; border-radius: 50px; font-weight: 900; font-size: 18px; display: none; cursor: pointer; box-shadow: 0 4px 15px rgba(0,255,0,0.3); }
-        #resultados { margin-top: 20px; display: flex; flex-direction: column; gap: 12px; padding-bottom: 50px; }
-        .card { background: var(--card); padding: 15px; border-radius: 12px; display: flex; align-items: center; gap: 15px; border: 1px solid #333; }
-        .card img { width: 90px; height: 90px; border-radius: 8px; border: 2px solid var(--laranja); object-fit: cover; }
-        .btn-whats { background: #25d366; color: white; padding: 10px; text-decoration: none; border-radius: 6px; font-size: 14px; display: block; margin-top: 8px; font-weight: bold; }
-    </style>
+<meta charset="UTF-8">
+<title>Sertão Bicos - DNA Pro Cactus</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style>
+:root {
+    --fundo: #080808;
+    --laranja: #ff8c00;
+    --verde: #00ff00;
+    --card: #111;
+}
+
+body {
+    background: var(--fundo);
+    color: white;
+    font-family: 'Segoe UI', sans-serif;
+    margin: 0;
+    text-align: center;
+}
+
+header {
+    padding: 25px;
+    font-size: 26px;
+    font-weight: 900;
+    border-bottom: 3px solid var(--verde);
+    box-shadow: 0 0 15px rgba(0,255,0,0.4);
+    text-transform: uppercase;
+}
+
+.container {
+    max-width: 450px;
+    margin: auto;
+    padding: 20px;
+}
+
+/* upload */
+.upload-box {
+    border: 3px dashed var(--laranja);
+    height: 200px;
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    margin-bottom: 20px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.upload-box input {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    cursor: pointer;
+}
+
+/* categorias */
+.grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.btn-cat {
+    background: #1a1a1a;
+    border: 2px solid var(--laranja);
+    padding: 15px;
+    color: white;
+    font-weight: bold;
+    border-radius: 12px;
+    cursor: pointer;
+}
+
+.btn-cat.active {
+    background: var(--laranja);
+    color: black;
+    border-color: white;
+}
+
+/* botão */
+#btnBuscar {
+    background: linear-gradient(45deg, #1e8449, #27ae60);
+    color: white;
+    border: none;
+    padding: 18px;
+    width: 100%;
+    border-radius: 50px;
+    font-weight: 900;
+    font-size: 18px;
+    display: none;
+    cursor: pointer;
+}
+
+/* loading */
+.loading {
+    animation: piscar 1s infinite;
+}
+@keyframes piscar {
+    0% { opacity: 1; }
+    50% { opacity: 0.4; }
+    100% { opacity: 1; }
+}
+
+/* resultados */
+#resultados {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding-bottom: 50px;
+}
+
+.card {
+    background: var(--card);
+    padding: 15px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    border: 1px solid #333;
+}
+
+.card img {
+    width: 90px;
+    height: 90px;
+    border-radius: 8px;
+    border: 2px solid var(--laranja);
+    object-fit: cover;
+}
+
+.btn-whats {
+    background: #25d366;
+    color: white;
+    padding: 10px;
+    text-decoration: none;
+    border-radius: 6px;
+    font-size: 14px;
+    display: block;
+    margin-top: 8px;
+    font-weight: bold;
+}
+</style>
 </head>
+
 <body>
 
 <header>🌵 SERTÃO BICOS 🌵</header>
+
 <div class="container">
-    <div class="upload-box" id="box">
-        <span id="txt">TOQUE PARA ENVIAR FOTO</span>
-        <input type="file" id="arquivo" accept="image/*">
-    </div>
 
-    <div class="grid">
-        <div class="btn-cat" id="c_carro" onclick="setCat('CARRO')">🚗 CARRO</div>
-        <div class="btn-cat" id="c_ambos" onclick="setCat('AMBOS')">🚗🏍️ AMBOS</div>
-    </div>
+<div class="upload-box" id="box">
+    <span id="txt">TOQUE PARA ENVIAR FOTO</span>
+    <input type="file" id="arquivo" accept="image/*">
+</div>
 
-    <button id="btnBuscar" onclick="buscar()">PROCURAR BICO AGORA</button>
-    <div id="status" style="margin-top: 15px; font-weight: bold; color: var(--verde);"></div>
-    <div id="resultados"></div>
+<div class="grid">
+    <div class="btn-cat" id="c_carro" onclick="setCat('CARRO')">🚗 CARRO</div>
+    <div class="btn-cat" id="c_ambos" onclick="setCat('AMBOS')">🚗🏍️ AMBOS</div>
+</div>
+
+<button id="btnBuscar" onclick="buscar()">PROCURAR BICO AGORA</button>
+
+<div id="status" style="margin-top: 15px; font-weight: bold; color: var(--verde);"></div>
+
+<div id="resultados"></div>
+
 </div>
 
 <script>
-// SINCRONIA: LINK DO SEU NGROK ATUALIZADO
-const URL_SERVIDOR = "https://undelegated-notarial-lessie.ngrok-free.dev";
+// 🔗 COLOQUE SEU LINK AQUI
+const URL_SERVIDOR = "SEU_LINK_AQUI";
+
 let categoria = '';
 
+// selecionar categoria
 function setCat(c) {
     categoria = c;
-    document.querySelectorAll('.btn-cat').forEach(b => b.classList.remove('active'));
-    document.getElementById(c == 'CARRO' ? 'c_carro' : 'c_ambos').classList.add('active');
-    if(document.getElementById('arquivo').files[0]) document.getElementById('btnBuscar').style.display = 'block';
+
+    document.querySelectorAll('.btn-cat')
+        .forEach(b => b.classList.remove('active'));
+
+    document.getElementById(
+        c === 'CARRO' ? 'c_carro' : 'c_ambos'
+    ).classList.add('active');
+
+    if (arquivo.files[0]) btnBuscar.style.display = 'block';
 }
 
-document.getElementById('arquivo').onchange = (e) => {
+// preview imagem
+arquivo.onchange = (e) => {
     const reader = new FileReader();
+
     reader.onload = (ev) => {
-        document.getElementById('box').style.backgroundImage = `url(${ev.target.result})`;
-        document.getElementById('txt').style.display = 'none';
-        if(categoria) document.getElementById('btnBuscar').style.display = 'block';
+        box.style.backgroundImage = `url(${ev.target.result})`;
+        txt.style.display = 'none';
+
+        if (categoria) btnBuscar.style.display = 'block';
     };
+
     reader.readAsDataURL(e.target.files[0]);
 };
 
+// buscar
 async function buscar() {
-    const fileInput = document.getElementById('arquivo');
-    if(!fileInput.files[0] || !categoria) return;
 
-    document.getElementById('status').innerText = "⏳ IA ANALISANDO NO SEU PC...";
-    document.getElementById('resultados').innerHTML = "";
-    
+    if (!arquivo.files[0] || !categoria) {
+        status.innerText = "⚠️ Selecione foto e categoria";
+        return;
+    }
+
+    status.innerText = "⏳ ANALISANDO...";
+    status.classList.add("loading");
+    resultados.innerHTML = "";
+
     const reader = new FileReader();
-    reader.readAsDataURL(fileInput.files[0]);
+
     reader.onload = async () => {
         try {
-            // ROTA SINCRONIZADA: /buscar
+
             const res = await fetch(`${URL_SERVIDOR}/buscar`, {
                 method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({ image: reader.result, categoria: categoria })
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    image: reader.result,
+                    categoria: categoria
+                })
             });
 
-            if(!res.ok) throw new Error("Servidor Offline");
-            
-            const bicos = await res.json();
-            exibir(bicos);
-        } catch (e) {
-            document.getElementById('status').innerText = "❌ ERRO: PC DESCONECTADO!";
+            if (!res.ok) throw new Error();
+
+            const dados = await res.json();
+            exibir(dados);
+
+        } catch {
+            status.innerText = "❌ ERRO DE CONEXÃO";
         }
     };
+
+    reader.readAsDataURL(arquivo.files[0]);
 }
 
+// exibir resultados
 function exibir(lista) {
-    document.getElementById('status').innerText = lista.length > 0 ? "✅ ENCONTRADO!" : "❌ NADA NA PASTA " + categoria;
-    document.getElementById('resultados').innerHTML = lista.map(b => `
+
+    status.classList.remove("loading");
+
+    if (lista.length === 0) {
+        status.innerText = "❌ NENHUM ROSTO COMPATÍVEL";
+        return;
+    }
+
+    status.innerText = "🔥 RESULTADOS ENCONTRADOS";
+
+    resultados.innerHTML = lista.map(b => `
         <div class="card">
             <img src="${b.foto}">
-            <div style="text-align:left; flex: 1;">
-                <b style="color:var(--verde)">${b.score}% Match</b><br>
+            <div style="text-align:left; flex:1;">
+                <b style="color:var(--verde)">
+                    ${b.score}% MATCH
+                </b><br>
                 <small>ID: ${b.numId}</small>
-                <a href="https://wa.me/551192564332?text=Quero os dados do Bico ID:${b.numId}" class="btn-whats" target="_blank">PEGAR DADOS 🌵</a>
+
+                <a href="https://wa.me/551192564332?text=Quero os dados do Bico ID:${b.numId}"
+                   class="btn-whats"
+                   target="_blank">
+                   PEGAR DADOS 🌵
+                </a>
             </div>
         </div>
     `).join('');
 }
 </script>
+
 </body>
 </html>
