@@ -9,36 +9,42 @@
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--cor-fundo); color: #fff; margin: 0; padding: 20px; text-align: center; }
         
         .container { max-width: 500px; margin: auto; }
-        h1 { color: var(--cor-principal); text-transform: uppercase; letter-spacing: 2px; }
+        h1 { color: var(--cor-principal); text-transform: uppercase; letter-spacing: 2px; text-shadow: 2px 2px #000; }
         
-        .area-foto { border: 2px dashed var(--cor-principal); padding: 30px; border-radius: 15px; margin-bottom: 20px; background: #111; cursor: pointer; }
-        #preview { width: 100%; border-radius: 10px; display: none; margin-top: 15px; }
+        .area-foto { border: 2px dashed var(--cor-principal); padding: 30px; border-radius: 15px; margin-bottom: 20px; background: #111; cursor: pointer; transition: 0.3s; }
+        .area-foto:hover { background: #1a1a1a; border-style: solid; }
+        #preview { width: 100%; border-radius: 10px; display: none; margin-top: 15px; border: 2px solid var(--cor-principal); }
         
-        select, .btn-buscar { width: 100%; padding: 15px; margin-top: 15px; border-radius: 8px; border: none; font-size: 1rem; font-weight: bold; }
-        select { background: #222; color: #fff; border: 1px solid var(--cor-principal); }
-        .btn-buscar { background: var(--cor-principal); color: #fff; cursor: pointer; text-transform: uppercase; transition: 0.3s; }
-        .btn-buscar:disabled { background: #444; cursor: not-allowed; }
+        select, .btn-buscar { width: 100%; padding: 18px; margin-top: 15px; border-radius: 8px; border: none; font-size: 1.1rem; font-weight: bold; }
+        select { background: #222; color: #fff; border: 1px solid var(--cor-principal); appearance: none; text-align: center; }
+        
+        .btn-buscar { background: var(--cor-principal); color: #fff; cursor: pointer; text-transform: uppercase; box-shadow: 0 4px 15px rgba(188, 108, 37, 0.3); }
+        .btn-buscar:active { transform: scale(0.98); }
+        .btn-buscar:disabled { background: #444; cursor: not-allowed; box-shadow: none; }
 
-        #status-texto { margin-top: 20px; font-size: 1.1rem; min-height: 1.5em; color: var(--cor-principal); }
+        #status-texto { margin-top: 25px; font-size: 1.2rem; font-weight: bold; min-height: 1.6em; color: var(--cor-principal); }
 
-        /* GRID DE RESULTADOS */
-        #resultados { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 30px; }
-        .card { background: #1a1a1a; border: 1px solid #333; border-radius: 10px; padding: 10px; overflow: hidden; animation: fadeIn 0.5s ease; }
-        .card img { width: 100%; border-radius: 5px; height: 180px; object-fit: cover; }
-        .card p { margin: 8px 0 0 0; font-weight: bold; font-size: 0.9rem; }
-        .score { color: #606c38; font-size: 0.8rem !important; }
+        /* GRID DE RESULTADOS OTIMIZADO */
+        #resultados { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 30px; padding-bottom: 50px; }
+        .card { background: #161616; border: 1px solid #333; border-radius: 12px; padding: 12px; overflow: hidden; animation: subir 0.4s ease forwards; opacity: 0; }
+        .card img { width: 100%; border-radius: 8px; height: 160px; object-fit: cover; border: 1px solid #222; }
+        .card p { margin: 10px 0 2px 0; font-weight: bold; font-size: 1rem; color: #f0f0f0; }
+        .score { color: #a3b18a !important; font-size: 0.85rem !important; margin-top: 0 !important; }
 
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes subir { 
+            from { opacity: 0; transform: translateY(20px); } 
+            to { opacity: 1; transform: translateY(0); } 
+        }
     </style>
 </head>
 <body>
 
 <div class="container">
     <h1>🌵 Sertão Bicos</h1>
-    <p>Encontre o bico certo pela foto</p>
+    <p style="color: #888;">Sistema de Identificação Biométrica</p>
 
     <div class="area-foto" onclick="document.getElementById('input-file').click()">
-        <span>📸 TOQUE PARA TIRAR FOTO</span>
+        <span id="label-foto">📸 TOQUE PARA TIRAR FOTO</span>
         <input type="file" id="input-file" accept="image/*" capture="user" hidden onchange="carregarFoto(event)">
         <img id="preview">
     </div>
@@ -55,18 +61,26 @@
 </div>
 
 <script>
+    // --- IMPORTANTE: COLOQUE SEU LINK DO NGROK ATUALIZADO AQUI ---
     const URL_API = "https://SUA-URL-NGROK.ngrok-free.dev"; 
+    
     let fotoBase64 = "";
 
     function carregarFoto(event) {
         const file = event.target.files[0];
+        if (!file) return;
+        
         const reader = new FileReader();
+        document.getElementById('label-foto').innerText = "🔄 Trocando foto...";
+        
         reader.onload = function(e) {
             fotoBase64 = e.target.result;
             const preview = document.getElementById('preview');
             preview.src = fotoBase64;
             preview.style.display = "block";
+            document.getElementById('label-foto').style.display = "none";
             document.getElementById('btn-acao').disabled = false;
+            document.getElementById('status-texto').innerHTML = "✅ Foto pronta!";
         }
         reader.readAsDataURL(file);
     }
@@ -75,43 +89,52 @@
         const statusLog = document.getElementById('status-texto');
         const resultadoDiv = document.getElementById('resultados');
         const btn = document.getElementById('btn-acao');
+        const categoria = document.getElementById('categoria').value;
 
+        // Limpeza e Loading
         statusLog.innerHTML = "⏳ <b>BUSCANDO BICO...</b>";
         resultadoDiv.innerHTML = ""; 
         btn.disabled = true;
 
         try {
+            // Envio para o servidor (que agora salva na pasta buscas_clientes)
             const res = await fetch(`${URL_API}/buscar`, {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({
                     image: fotoBase64,
-                    categoria: document.getElementById('categoria').value
+                    categoria: categoria
                 })
             });
+
+            if (!res.ok) throw new Error("Erro no servidor");
 
             const dados = await res.json();
             
             if(dados.length > 0) {
-                statusLog.innerHTML = `✅ ENCONTRAMOS ${dados.length} PARECIDOS!`;
-                dados.forEach(bico => {
-                    resultadoDiv.innerHTML += `
-                        <div class="card">
-                            <img src="${bico.foto}">
-                            <p>ID: ${bico.numId}</p>
-                            <p class="score">Sincronia: ${bico.score}%</p>
-                        </div>`;
+                statusLog.innerHTML = `✅ ENCONTRAMOS ${dados.length} CORRESPONDÊNCIAS!`;
+                
+                dados.forEach((bico, index) => {
+                    setTimeout(() => {
+                        resultadoDiv.innerHTML += `
+                            <div class="card">
+                                <img src="${bico.foto}">
+                                <p>ID: ${bico.numId}</p>
+                                <p class="score">Sincronia: ${bico.score}%</p>
+                            </div>`;
+                    }, index * 100); // Efeito cascata nos cards
                 });
             } else {
-                statusLog.innerHTML = "❌ NENHUM BICO ENCONTRADO.";
+                statusLog.innerHTML = "❌ NENHUM PARECIDO ENCONTRADO.";
             }
         } catch (e) {
-            // A ÚNICA MUDANÇA É AQUI:
-            statusLog.innerHTML = "⚠️ <b>CHAME O RESPONSÁVEL</b>";
+            console.error(e);
+            statusLog.innerHTML = "⚠️ ERRO: SERVIDOR OFFLINE OU LINK EXPIRADO.";
         } finally {
             btn.disabled = false;
         }
     }
 </script>
+
 </body>
 </html>
